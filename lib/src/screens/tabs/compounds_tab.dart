@@ -1,0 +1,19 @@
+import 'package:eodb/src/db/database.dart';
+import 'package:eodb/src/widgets/database_list.dart';
+import 'package:flutter/material.dart';
+
+/// The compounds tab.
+class CompoundsTab extends StatefulWidget {
+  /// Creates a new [CompoundsTab].
+  const CompoundsTab({super.key});
+
+  @override
+  State<CompoundsTab> createState() => _CompoundsTabState();
+}
+
+class _CompoundsTabState extends State<CompoundsTab> {
+  @override
+  Widget build(BuildContext context) {
+    return DatabaseList(names: Database.instance.compoundNamesDb);
+  }
+}

@@ -1,0 +1,5 @@
+package com.draco.eodb
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()

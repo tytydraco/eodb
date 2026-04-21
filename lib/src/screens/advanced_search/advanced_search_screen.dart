@@ -1,5 +1,7 @@
 import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
+import 'package:eodb/src/model/item_criteria_filter.dart';
+import 'package:eodb/src/model/search_criteria.dart';
 import 'package:eodb/src/screens/advanced_search/item_content_criteria.dart';
 import 'package:eodb/src/widgets/database_list.dart';
 import 'package:eodb/src/widgets/input_tile.dart';
@@ -26,6 +28,9 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   // Default to compounds because empty selection is disabled.
   var _itemTypeFilters = <ItemType>{ItemType.compound};
 
+  final _itemCriteriaFiltersCompounds = <ItemCriteriaFilter>[];
+  final _itemCriteriaFiltersOils = <ItemCriteriaFilter>[];
+
   Widget _itemTypeSegmentedButton() {
     return ListTile(
       title: const Text('Item type'),
@@ -51,9 +56,23 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   }
 
   Future<void> _showResults() async {
+    final searchCriteria = SearchCriteria(
+      id: _idController.text,
+      name: _nameController.text,
+      botanicalName: _botanicalNameController.text,
+      cas: _casController.text,
+      publicationAuthor: _publicationAuthorController.text,
+      publicationTitle: _publicationTitleController.text,
+      publicationDate: _publicationDateController.text,
+      type: _itemTypeFilters.first,
+      itemContentCriteria: (_itemTypeFilters.first == ItemType.compound)
+          ? _itemCriteriaFiltersCompounds
+          : _itemCriteriaFiltersOils,
+    );
+
     // Filter items by advanced criteria.
     final filteredNames = await Database.instance.filterItemsByCriteria(
-      // TODO(tytydraco): Create advanced criteria model and pass to database
+      searchCriteria,
     );
 
     // Ensure we have not lost context.
@@ -147,11 +166,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           const Divider(),
 
           // Compound criteria.
-          const ItemContentCriteria(type: ItemType.compound),
-          const Divider(),
-
-          // Oil criteria.
-          const ItemContentCriteria(type: ItemType.oil),
+          ItemContentCriteria(
+            type: _itemTypeFilters.first,
+            itemCriteriaFilters: (_itemTypeFilters.first == ItemType.compound)
+                ? _itemCriteriaFiltersCompounds
+                : _itemCriteriaFiltersOils,
+          ),
           const Divider(),
         ],
       ),

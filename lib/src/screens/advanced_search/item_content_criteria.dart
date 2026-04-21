@@ -11,11 +11,15 @@ class ItemContentCriteria extends StatefulWidget {
   /// Creates a new [ItemContentCriteria].
   const ItemContentCriteria({
     required this.type,
+    required this.itemCriteriaFilters,
     super.key,
   });
 
   /// The type of the item to filter.
   final ItemType type;
+
+  /// The list of [ItemCriteriaFilter] to mutate.
+  final List<ItemCriteriaFilter> itemCriteriaFilters;
 
   @override
   State<ItemContentCriteria> createState() => _ItemContentCriteriaState();
@@ -26,11 +30,9 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
       ? Database.instance.compoundNamesDb
       : Database.instance.oilNamesDb;
 
-  final _itemCriteriaFilters = <ItemCriteriaFilter>[];
-
   /// Edit an existing filter from the list.
   Future<void> _editFilter(int index) async {
-    final filter = _itemCriteriaFilters[index];
+    final filter = widget.itemCriteriaFilters[index];
 
     // Request result from edit screen.
     final newFilter = await Navigator.push(
@@ -45,7 +47,7 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     // Do not apply edits if user selected "Back".
     if (newFilter != null) {
       setState(() {
-        _itemCriteriaFilters[index] = newFilter;
+        widget.itemCriteriaFilters[index] = newFilter;
       });
     }
   }
@@ -74,11 +76,11 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     );
 
     setState(() {
-      _itemCriteriaFilters.add(filter);
+      widget.itemCriteriaFilters.add(filter);
     });
 
     // Immediately edit the newly added filter.
-    final index = _itemCriteriaFilters.indexOf(filter);
+    final index = widget.itemCriteriaFilters.indexOf(filter);
     await _editFilter(index);
   }
 
@@ -87,7 +89,7 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        final itemCriteriaFilter = _itemCriteriaFilters[index];
+        final itemCriteriaFilter = widget.itemCriteriaFilters[index];
         return ListTile(
           title: Text(itemCriteriaFilter.name),
           subtitle: Text(
@@ -96,7 +98,7 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
           ),
           leading: IconButton(
             onPressed: () =>
-                setState(() => _itemCriteriaFilters.removeAt(index)),
+                setState(() => widget.itemCriteriaFilters.removeAt(index)),
             icon: const Icon(Icons.remove),
           ),
           trailing: IconButton(
@@ -105,7 +107,7 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
           ),
         );
       },
-      itemCount: _itemCriteriaFilters.length,
+      itemCount: widget.itemCriteriaFilters.length,
     );
   }
 

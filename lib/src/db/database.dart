@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:eodb/src/enum/item_type.dart';
+import 'package:eodb/src/model/oil_model.dart';
+import 'package:eodb/src/model/search_criteria.dart';
 import 'package:eodb/src/util/slugify.dart';
 import 'package:flutter/services.dart';
 
@@ -61,7 +63,16 @@ class Database {
   }
 
   /// Returns a list of item names matching advanced criteria.
-  Future<List<String>> filterItemsByCriteria() async {
+  Future<List<String>> filterItemsByCriteria(SearchCriteria criteria) async {
+    final type = criteria.type;
+    final db = (type == ItemType.compound) ? compoundNamesDb : oilNamesDb;
+
+    final jsons = await Future.wait(
+      db.map((name) async => loadItemJson(name, type)).toList(),
+    );
+
+    final items = jsons.map((json) async => OilModel.fromJson(json)).toList();
+
     return [];
   }
 }

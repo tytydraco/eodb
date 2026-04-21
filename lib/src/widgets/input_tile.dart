@@ -10,6 +10,7 @@ class InputTile extends StatelessWidget {
     this.hint,
     this.subtitle,
     this.digitsOnly = false,
+    this.decimalAllowed = false,
     super.key,
   });
 
@@ -28,21 +29,35 @@ class InputTile extends StatelessWidget {
   /// Whether or not we should restrict to digits.
   final bool digitsOnly;
 
+  /// Whether or not we should allow decimals.
+  final bool decimalAllowed;
+
+  List<TextInputFormatter> _getInputFormatters() {
+    if (digitsOnly && decimalAllowed) {
+      return [FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d*)?'))];
+    }
+    if (digitsOnly) return [FilteringTextInputFormatter.digitsOnly];
+    return [];
+  }
+
+  TextInputType? _getTextInputType() {
+    if (digitsOnly) {
+      return TextInputType.numberWithOptions(decimal: decimalAllowed);
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final inputFormatters = digitsOnly
-        ? [FilteringTextInputFormatter.digitsOnly]
-        : null;
-    final keyboardType = digitsOnly ? TextInputType.number : null;
-
     return ListTile(
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : null,
       trailing: SizedBox(
         width: 200,
         child: TextFormField(
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
+          inputFormatters: _getInputFormatters(),
+          keyboardType: _getTextInputType(),
           controller: controller,
           textAlign: TextAlign.center,
           decoration: InputDecoration(

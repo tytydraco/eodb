@@ -1,5 +1,5 @@
+import 'package:eodb/src/enum/filter_mode.dart';
 import 'package:eodb/src/enum/item_type.dart';
-import 'package:eodb/src/model/filter_mode.dart';
 
 /// A mutable model class for a filter option.
 class ItemCriteriaFilter {

@@ -1,6 +1,6 @@
 import 'package:eodb/src/db/database.dart';
+import 'package:eodb/src/enum/filter_mode.dart';
 import 'package:eodb/src/enum/item_type.dart';
-import 'package:eodb/src/model/filter_mode.dart';
 import 'package:eodb/src/model/item_criteria_filter.dart';
 import 'package:eodb/src/screens/advanced_search/edit_filter_criteria.dart';
 import 'package:eodb/src/widgets/database_list.dart';
@@ -22,14 +22,7 @@ class ItemContentCriteria extends StatefulWidget {
 }
 
 class _ItemContentCriteriaState extends State<ItemContentCriteria> {
-  final _itemCriteriaFilters = <ItemCriteriaFilter>[
-    ItemCriteriaFilter(
-      name: '123',
-      type: ItemType.compound,
-      percentage: 123,
-      filterMode: FilterMode.equal,
-    ),
-  ];
+  final _itemCriteriaFilters = <ItemCriteriaFilter>[];
 
   Future<void> _editFilter(int index) async {
     final filter = _itemCriteriaFilters[index];
@@ -78,10 +71,14 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
 
   @override
   Widget build(BuildContext context) {
+    final db = (widget.type == ItemType.compound)
+        ? Database.instance.compoundNamesDb
+        : Database.instance.oilNamesDb;
+
     return Column(
       children: [
         ListTile(
-          title: const Text('Compound filters'),
+          title: Text('${widget.type.displayName} filters'),
           trailing: IconButton(
             onPressed: () async {
               final result = await Navigator.push(
@@ -90,8 +87,8 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
                 MaterialPageRoute<String>(
                   builder: (context) => Material(
                     child: DatabaseList(
-                      names: Database.instance.compoundNamesDb,
-                      type: ItemType.compound,
+                      names: db,
+                      type: widget.type,
                       returnSelection: true,
                     ),
                   ),

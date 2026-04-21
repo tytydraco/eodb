@@ -74,6 +74,10 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           const Divider(),
 
           const ItemContentCriteria(type: ItemType.compound),
+          const Divider(),
+
+          const ItemContentCriteria(type: ItemType.oil),
+          const Divider(),
         ],
       ),
     );

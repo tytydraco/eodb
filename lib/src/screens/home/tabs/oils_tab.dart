@@ -1,4 +1,5 @@
 import 'package:eodb/src/db/database.dart';
+import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/widgets/database_list.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,9 @@ class OilsTab extends StatefulWidget {
 class _OilsTabState extends State<OilsTab> {
   @override
   Widget build(BuildContext context) {
-    return DatabaseList(names: Database.instance.oilNamesDb);
+    return DatabaseList(
+      names: Database.instance.oilNamesDb,
+      type: ItemType.oil,
+    );
   }
 }

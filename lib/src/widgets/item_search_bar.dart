@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 /// A search bar widget with decoration.
-class NameSearchBar extends StatelessWidget {
-  /// Creates a new [NameSearchBar].
-  const NameSearchBar({
+class ItemSearchBar extends StatelessWidget {
+  /// Creates a new [ItemSearchBar].
+  const ItemSearchBar({
     required this.controller,
     this.onChanged,
     super.key,

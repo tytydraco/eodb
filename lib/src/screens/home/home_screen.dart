@@ -1,6 +1,6 @@
-import 'package:eodb/src/screens/tabs/compounds_tab.dart';
-import 'package:eodb/src/screens/tabs/oils_tab.dart';
-import 'package:eodb/src/widgets/name_search_bar.dart';
+import 'package:eodb/src/screens/home/tabs/compounds_tab.dart';
+import 'package:eodb/src/screens/home/tabs/oils_tab.dart';
+import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
 
 /// The home screen.
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: NameSearchBar(
+        title: ItemSearchBar(
           controller: _searchController,
           onChanged: _filterNames,
         ),

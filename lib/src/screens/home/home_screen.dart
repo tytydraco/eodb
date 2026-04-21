@@ -1,6 +1,5 @@
 import 'package:eodb/src/screens/home/tabs/compounds_tab.dart';
 import 'package:eodb/src/screens/home/tabs/oils_tab.dart';
-import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
 
 /// The home screen.
@@ -14,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
-  final _searchController = TextEditingController();
 
   final List<Widget> _tabs = const [
     CompoundsTab(),
@@ -30,24 +28,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
-    _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _filterNames(String criteria) async {
-    // TODO(tytydraco): Implement.
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: ItemSearchBar(
-          controller: _searchController,
-          onChanged: _filterNames,
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabController.index,
         onTap: (index) => setState(() => _tabController.index = index),

@@ -8,6 +8,7 @@ class DatabaseList extends StatefulWidget {
   const DatabaseList({
     required this.names,
     required this.type,
+    this.criteria,
     super.key,
   });
 
@@ -16,6 +17,9 @@ class DatabaseList extends StatefulWidget {
 
   /// The type of the items in this list.
   final ItemType type;
+
+  /// Optional search criteria.
+  final String? criteria;
 
   @override
   State<DatabaseList> createState() => _DatabaseListState();
@@ -34,18 +38,34 @@ class _DatabaseListState extends State<DatabaseList> {
     );
   }
 
+  List<String> _filterNames() {
+    final sortedNames = widget.names.toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+    // No search criteria specified.
+    if (widget.criteria == null) return sortedNames;
+
+    return sortedNames
+        .where(
+          (name) => name.toLowerCase().contains(widget.criteria!.toLowerCase()),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filteredNames = _filterNames();
+
     return ListView.separated(
       itemBuilder: (context, index) {
-        final name = widget.names[index];
+        final name = filteredNames[index];
         return ListTile(
           title: Text(name),
           onTap: () => _showInfo(name),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
-      itemCount: widget.names.length,
+      itemCount: filteredNames.length,
     );
   }
 }

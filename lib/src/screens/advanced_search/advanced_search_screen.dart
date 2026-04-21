@@ -21,6 +21,30 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   final _publicationTitleController = TextEditingController();
   final _publicationDateController = TextEditingController();
 
+  // Default to compounds because empty selection is disabled.
+  var _itemTypeFilters = <ItemType>{ItemType.compound};
+
+  Widget _itemTypeSegmentedButton() {
+    return ListTile(
+      title: const Text('Item type'),
+      trailing: SegmentedButton<ItemType>(
+        onSelectionChanged: (itemTypeFilters) => setState(() {
+          _itemTypeFilters = itemTypeFilters;
+        }),
+        segments: ItemType.values
+            .map(
+              (type) => ButtonSegment(
+                value: type,
+                label: Text(type.displayName),
+              ),
+            )
+            .toList(),
+        selected: _itemTypeFilters,
+        multiSelectionEnabled: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +108,10 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
             title: 'Publication date',
             hint: 'Any',
           ),
+          const Divider(),
+
+          // Item type.
+          _itemTypeSegmentedButton(),
           const Divider(),
 
           // Compound criteria.

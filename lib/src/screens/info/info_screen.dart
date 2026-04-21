@@ -31,7 +31,7 @@ class _InfoScreenState extends State<InfoScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Info'),
+        title: Text(widget.name),
       ),
       body: infoWidget,
     );

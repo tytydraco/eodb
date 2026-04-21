@@ -27,26 +27,33 @@ class _EditFilterCriteriaState extends State<EditFilterCriteria> {
     text: widget.itemCriteriaFilter.filterMode.displayName,
   );
 
+  /// Save the filter and return the result to the caller.
   void _saveFilterAndReturn() {
+    // Revert to default percentage if parsing fails.
     widget.itemCriteriaFilter.percentage =
         double.tryParse(_percentageController.text) ??
         widget.itemCriteriaFilter.percentage;
 
+    // Match filter mode by display name.
     final filterModes = FilterMode.values.where(
       (mode) => mode.displayName == _filterModeController.text,
     );
 
+    // Revert to default filter mode if matching fails.
     widget.itemCriteriaFilter.filterMode = filterModes.isNotEmpty
         ? filterModes.first
         : widget.itemCriteriaFilter.filterMode;
 
+    // Return result to caller.
     Navigator.pop(
       context,
       widget.itemCriteriaFilter,
     );
   }
 
+  /// Dropdown menu widget for the filter modes.
   Widget _filterModeDropdown() {
+    // Map filter modes to entries.
     final dropdownMenuEntries = FilterMode.values
         .map(
           (filterMode) => DropdownMenuEntry(
@@ -55,6 +62,7 @@ class _EditFilterCriteriaState extends State<EditFilterCriteria> {
           ),
         )
         .toList();
+
     return DropdownMenu<FilterMode>(
       controller: _filterModeController,
       width: 200,
@@ -77,12 +85,14 @@ class _EditFilterCriteriaState extends State<EditFilterCriteria> {
       ),
       body: ListView(
         children: [
+          // Name.
           ListTile(
             title: const Text('Name'),
             trailing: Text(widget.itemCriteriaFilter.name),
           ),
           const Divider(),
 
+          // Filter mode.
           ListTile(
             title: const Text('Filter mode'),
             trailing: SizedBox(
@@ -92,6 +102,7 @@ class _EditFilterCriteriaState extends State<EditFilterCriteria> {
           ),
           const Divider(),
 
+          // Percentage.
           InputTile(
             controller: _percentageController,
             title: 'Percentage',

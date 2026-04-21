@@ -25,6 +25,7 @@ class InfoScreen extends StatefulWidget {
 class _InfoScreenState extends State<InfoScreen> {
   @override
   Widget build(BuildContext context) {
+    // Choose the correct info screen based on the item type.
     final infoWidget = (widget.type == ItemType.compound)
         ? InfoCompound(name: widget.name)
         : InfoOil(name: widget.name);

@@ -29,6 +29,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
       ),
       body: ListView(
         children: [
+          // ID.
           InputTile(
             controller: _idController,
             title: 'ID',
@@ -36,36 +37,48 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
             digitsOnly: true,
           ),
           const Divider(),
+
+          // Name.
           InputTile(
             controller: _nameController,
             title: 'Name',
             hint: 'Any',
           ),
           const Divider(),
+
+          // Botanical name.
           InputTile(
             controller: _botanicalNameController,
             title: 'Botanical name',
             hint: 'Any',
           ),
           const Divider(),
+
+          // CAS #.
           InputTile(
             controller: _casController,
             title: 'CAS #',
             hint: 'Any',
           ),
           const Divider(),
+
+          // Publication author.
           InputTile(
             controller: _publicationAuthorController,
             title: 'Publication author',
             hint: 'Any',
           ),
           const Divider(),
+
+          // Publication title.
           InputTile(
             controller: _publicationTitleController,
             title: 'Publication title',
             hint: 'Any',
           ),
           const Divider(),
+
+          // Publication date.
           InputTile(
             controller: _publicationDateController,
             title: 'Publication date',
@@ -73,9 +86,11 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           ),
           const Divider(),
 
+          // Compound criteria.
           const ItemContentCriteria(type: ItemType.compound),
           const Divider(),
 
+          // Oil criteria.
           const ItemContentCriteria(type: ItemType.oil),
           const Divider(),
         ],

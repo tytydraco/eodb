@@ -38,10 +38,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         currentIndex: _tabController.index,
         onTap: (index) => setState(() => _tabController.index = index),
         items: const [
+          // Compounds.
           BottomNavigationBarItem(
             icon: Icon(Icons.dangerous_outlined),
             label: 'Compounds',
           ),
+
+          // Oils.
           BottomNavigationBarItem(
             icon: Icon(Icons.oil_barrel_outlined),
             label: 'Oils',

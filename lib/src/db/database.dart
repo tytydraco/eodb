@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eodb/src/enum/item_type.dart';
+import 'package:eodb/src/util/slugify.dart';
 import 'package:flutter/services.dart';
 
 /// Assets for compounds and oils.
@@ -35,14 +37,26 @@ class Database {
 
   /// Populates the compounds and oils name database.
   Future<void> populateNames() async {
+    // Add all compounds.
     final compoundNames = await _namesFromAsset(Database.compoundsListAsset);
     compoundNamesDb
       ..clear()
       ..addAll(compoundNames);
 
+    // Add all oils.
     final oilNames = await _namesFromAsset(Database.oilsListAsset);
     oilNamesDb
       ..clear()
       ..addAll(oilNames);
+  }
+
+  /// Returns the JSON content for an item by [name] and [type].
+  Future<Map<String, dynamic>> loadItemJson(String name, ItemType type) async {
+    final slug = slugify(name);
+    final subpath = type == ItemType.compound ? 'compounds' : 'oils';
+    final rawJson = await rootBundle.loadString(
+      'assets/eoscraper/$subpath/$slug.json',
+    );
+    return jsonDecode(rawJson) as Map<String, dynamic>;
   }
 }

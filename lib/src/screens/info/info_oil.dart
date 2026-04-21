@@ -1,11 +1,9 @@
-import 'dart:convert';
-
+import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/oil_model.dart';
-import 'package:eodb/src/screens/info/info_screen.dart';
-import 'package:eodb/src/util/slugify.dart';
+import 'package:eodb/src/widgets/eo_network_image.dart';
+import 'package:eodb/src/widgets/item_content_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// The info for an oil.
 class InfoOil extends StatefulWidget {
@@ -23,39 +21,27 @@ class InfoOil extends StatefulWidget {
 }
 
 class _InfoOilState extends State<InfoOil> {
+  /// Create an [OilModel] from the EssentialOils.org JSON entry.
   Future<OilModel> _loadModelFromJson() async {
-    final slug = slugify(widget.name);
-    final rawJson = await rootBundle.loadString(
-      'assets/eoscraper/oils/$slug.json',
+    final json = await Database.instance.loadItemJson(
+      widget.name,
+      ItemType.oil,
     );
-    final json = jsonDecode(rawJson) as Map<String, dynamic>;
     return OilModel.fromJson(json);
   }
 
+  /// Generate the content list.
   Iterable<Widget> _generateContentList(OilModel model) sync* {
     final sortedModels = model.compoundContent!.toList()
       ..sort(
         (a, b) => b.percentage.compareTo(a.percentage),
       );
 
-    for (final compoundModel in sortedModels) {
-      yield ListTile(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute<void>(
-              builder: (context) => InfoScreen(
-                name: compoundModel.name,
-                type: ItemType.compound,
-              ),
-            ),
-          );
-        },
-        title: Text(compoundModel.name),
-        subtitle: Text('${compoundModel.percentage}%'),
-      );
-      yield const Divider();
-    }
+    yield* generateContentList(
+      context,
+      sortedModels,
+      ItemType.oil,
+    );
   }
 
   @override
@@ -74,30 +60,7 @@ class _InfoOilState extends State<InfoOil> {
           children: [
             ListTile(
               title: const Text('Image'),
-              trailing: model.imageUrl != null
-                  ? Image.network(
-                      alignment: Alignment.centerRight,
-                      'https://essentialoils.org/${model.imageUrl!}',
-                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
-                      loadingBuilder: (_, child, loadingProgress) {
-                        // Done loading.
-                        if (loadingProgress == null) return child;
-
-                        // Ambiguous file size.
-                        if (loadingProgress.expectedTotalBytes == null) {
-                          return const CircularProgressIndicator();
-                        }
-
-                        // Show real-time progress.
-                        final progressPercent =
-                            loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!;
-                        return CircularProgressIndicator(
-                          value: progressPercent,
-                        );
-                      },
-                    )
-                  : const Text('N/A'),
+              trailing: EoNetworkImage(imageUrlSegment: model.imageUrl),
             ),
             const Divider(),
             ListTile(

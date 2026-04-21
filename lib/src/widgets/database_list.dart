@@ -1,10 +1,11 @@
+import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/advanced_search/advanced_search_screen.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
 
-/// A vertical scrolling list derived from the [DatabaseList].
+/// A vertical scrolling list derived from the [Database].
 class DatabaseList extends StatefulWidget {
   /// Creates a new [DatabaseList].
   const DatabaseList({
@@ -31,6 +32,7 @@ class _DatabaseListState extends State<DatabaseList> {
   final _searchController = TextEditingController();
   String? _criteria;
 
+  /// Show the info screen for an item.
   Future<void> _showInfo(String name) async {
     await Navigator.push(
       context,
@@ -43,13 +45,16 @@ class _DatabaseListState extends State<DatabaseList> {
     );
   }
 
+  /// Return a list of names that match the search criteria.
   List<String> _filterNames() {
+    // Sort by name, ascending.
     final sortedNames = widget.names.toList()
       ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     // No search criteria specified.
     if (_criteria == null) return sortedNames;
 
+    // Only return matching results.
     return sortedNames
         .where(
           (name) => name.toLowerCase().contains(_criteria!.toLowerCase()),
@@ -57,6 +62,7 @@ class _DatabaseListState extends State<DatabaseList> {
         .toList();
   }
 
+  /// Show the advanced search page.
   Future<void> _showAdvancedSearch() async {
     await Navigator.push(
       context,

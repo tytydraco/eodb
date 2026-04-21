@@ -28,9 +28,11 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
 
   final _itemCriteriaFilters = <ItemCriteriaFilter>[];
 
+  /// Edit an existing filter from the list.
   Future<void> _editFilter(int index) async {
     final filter = _itemCriteriaFilters[index];
 
+    // Request result from edit screen.
     final newFilter = await Navigator.push(
       context,
       MaterialPageRoute<ItemCriteriaFilter>(
@@ -40,37 +42,12 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
       ),
     );
 
+    // Do not apply edits if user selected "Back".
     if (newFilter != null) {
       setState(() {
         _itemCriteriaFilters[index] = newFilter;
       });
     }
-  }
-
-  Widget _criteriaList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        final itemCriteriaFilter = _itemCriteriaFilters[index];
-        return ListTile(
-          title: Text(itemCriteriaFilter.name),
-          subtitle: Text(
-            '${itemCriteriaFilter.filterMode.displayName} '
-            '${itemCriteriaFilter.percentage}%',
-          ),
-          leading: IconButton(
-            onPressed: () =>
-                setState(() => _itemCriteriaFilters.removeAt(index)),
-            icon: const Icon(Icons.remove),
-          ),
-          trailing: IconButton(
-            onPressed: () => _editFilter(index),
-            icon: const Icon(Icons.edit),
-          ),
-        );
-      },
-      itemCount: _itemCriteriaFilters.length,
-    );
   }
 
   Future<void> _addItem() async {
@@ -105,6 +82,33 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     await _editFilter(index);
   }
 
+  /// List view widget for our filters.
+  Widget _filterList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final itemCriteriaFilter = _itemCriteriaFilters[index];
+        return ListTile(
+          title: Text(itemCriteriaFilter.name),
+          subtitle: Text(
+            '${itemCriteriaFilter.filterMode.displayName} '
+            '${itemCriteriaFilter.percentage}%',
+          ),
+          leading: IconButton(
+            onPressed: () =>
+                setState(() => _itemCriteriaFilters.removeAt(index)),
+            icon: const Icon(Icons.remove),
+          ),
+          trailing: IconButton(
+            onPressed: () => _editFilter(index),
+            icon: const Icon(Icons.edit),
+          ),
+        );
+      },
+      itemCount: _itemCriteriaFilters.length,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -116,7 +120,7 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
             icon: const Icon(Icons.add),
           ),
         ),
-        _criteriaList(),
+        _filterList(),
       ],
     );
   }

@@ -32,6 +32,7 @@ class InputTile extends StatelessWidget {
   /// Whether or not we should allow decimals.
   final bool decimalAllowed;
 
+  /// Returns the input formatters to use.
   List<TextInputFormatter> _getInputFormatters() {
     if (digitsOnly && decimalAllowed) {
       return [FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d*)?'))];
@@ -40,6 +41,7 @@ class InputTile extends StatelessWidget {
     return [];
   }
 
+  /// Returns the text input type to use.
   TextInputType? _getTextInputType() {
     if (digitsOnly) {
       return TextInputType.numberWithOptions(decimal: decimalAllowed);

@@ -1,5 +1,7 @@
 import 'package:eodb/src/enum/item_type.dart';
+import 'package:eodb/src/screens/advanced_search/advanced_search_screen.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
+import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
 
 /// A vertical scrolling list derived from the [DatabaseList].
@@ -8,7 +10,6 @@ class DatabaseList extends StatefulWidget {
   const DatabaseList({
     required this.names,
     required this.type,
-    this.criteria,
     this.returnSelection = false,
     super.key,
   });
@@ -19,9 +20,6 @@ class DatabaseList extends StatefulWidget {
   /// The type of the items in this list.
   final ItemType type;
 
-  /// Optional search criteria.
-  final String? criteria;
-
   /// Return the selection as a result.
   final bool returnSelection;
 
@@ -30,6 +28,9 @@ class DatabaseList extends StatefulWidget {
 }
 
 class _DatabaseListState extends State<DatabaseList> {
+  final _searchController = TextEditingController();
+  String? _criteria;
+
   Future<void> _showInfo(String name) async {
     await Navigator.push(
       context,
@@ -47,31 +48,54 @@ class _DatabaseListState extends State<DatabaseList> {
       ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     // No search criteria specified.
-    if (widget.criteria == null) return sortedNames;
+    if (_criteria == null) return sortedNames;
 
     return sortedNames
         .where(
-          (name) => name.toLowerCase().contains(widget.criteria!.toLowerCase()),
+          (name) => name.toLowerCase().contains(_criteria!.toLowerCase()),
         )
         .toList();
+  }
+
+  Future<void> _showAdvancedSearch() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const AdvancedSearchScreen(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final filteredNames = _filterNames();
 
-    return ListView.separated(
-      itemBuilder: (context, index) {
-        final name = filteredNames[index];
-        return ListTile(
-          title: Text(name),
-          onTap: () => widget.returnSelection
-              ? Navigator.pop<String>(context, name)
-              : _showInfo(name),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-      itemCount: filteredNames.length,
+    return Scaffold(
+      appBar: AppBar(
+        title: ItemSearchBar(
+          controller: _searchController,
+          onChanged: (criteria) async => setState(() => _criteria = criteria),
+        ),
+        actions: [
+          IconButton(
+            onPressed: _showAdvancedSearch,
+            icon: const Icon(Icons.location_searching),
+          ),
+        ],
+      ),
+      body: ListView.separated(
+        itemBuilder: (context, index) {
+          final name = filteredNames[index];
+          return ListTile(
+            title: Text(name),
+            onTap: () => widget.returnSelection
+                ? Navigator.pop<String>(context, name)
+                : _showInfo(name),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemCount: filteredNames.length,
+      ),
     );
   }
 }

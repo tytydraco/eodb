@@ -2,9 +2,9 @@ import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/filter_mode.dart';
 import 'package:eodb/src/model/item_criteria_filter.dart';
+import 'package:eodb/src/screens/advanced_search/edit_filter_criteria.dart';
 import 'package:eodb/src/widgets/database_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// Widget to filter by compound or oil content.
 class ItemContentCriteria extends StatefulWidget {
@@ -34,81 +34,20 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
   Future<void> _editFilter(int index) async {
     final filter = _itemCriteriaFilters[index];
 
-    final percentageController = TextEditingController(
-      text: filter.percentage.toString(),
-    );
-
-    var filterMode = filter.filterMode;
-
-    void save() {
-      setState(() {
-        filter
-          ..name = 'NEW'
-          ..filterMode = filterMode;
-      });
-    }
-
-    await showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit filter'),
-        content: Column(
-          children: [
-            Row(
-              children: [
-                const Expanded(child: Text('Percentage')),
-                SizedBox(
-                  width: 100,
-                  child: TextFormField(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    keyboardType: TextInputType.number,
-                    controller: percentageController,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      hintText: 'Any',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            ListTile(
-              title: const Text('Filter mode'),
-              trailing: SizedBox(
-                width: 100,
-                child: DropdownButtonFormField(
-                  items: FilterMode.values
-                      .map(
-                        (mode) => DropdownMenuItem<FilterMode>(
-                          value: mode,
-                          child: Text(mode.displayName),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() => filterMode = value ?? FilterMode.equal);
-                  },
-                ),
-              ),
-            ),
-          ],
+    final newFilter = await Navigator.push(
+      context,
+      MaterialPageRoute<ItemCriteriaFilter>(
+        builder: (context) => EditFilterCriteria(
+          itemCriteriaFilter: filter,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              save();
-              Navigator.pop(context);
-            },
-            child: const Text('Save'),
-          ),
-        ],
       ),
     );
+
+    if (newFilter != null) {
+      setState(() {
+        _itemCriteriaFilters[index] = newFilter;
+      });
+    }
   }
 
   Widget _criteriaList() {

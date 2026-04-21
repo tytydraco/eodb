@@ -1,7 +1,7 @@
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/advanced_search/item_content_criteria.dart';
+import 'package:eodb/src/widgets/input_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// The advanced search screen.
 class AdvancedSearchScreen extends StatefulWidget {
@@ -21,36 +21,6 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   final _publicationTitleController = TextEditingController();
   final _publicationDateController = TextEditingController();
 
-  Widget _inputTile({
-    required TextEditingController controller,
-    required String title,
-    String? subtitle,
-    bool digitsOnly = false,
-  }) {
-    final inputFormatters = digitsOnly
-        ? [FilteringTextInputFormatter.digitsOnly]
-        : null;
-    final keyboardType = digitsOnly ? TextInputType.number : null;
-
-    return ListTile(
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle) : null,
-      trailing: SizedBox(
-        width: 200,
-        child: TextFormField(
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
-          controller: controller,
-          textAlign: TextAlign.center,
-          decoration: const InputDecoration(
-            hintText: 'Any',
-            border: OutlineInputBorder(),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,40 +29,47 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
       ),
       body: ListView(
         children: [
-          _inputTile(
+          InputTile(
             controller: _idController,
             title: 'ID',
+            hint: 'Any',
             digitsOnly: true,
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _nameController,
             title: 'Name',
+            hint: 'Any',
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _botanicalNameController,
             title: 'Botanical name',
+            hint: 'Any',
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _casController,
             title: 'CAS #',
+            hint: 'Any',
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _publicationAuthorController,
             title: 'Publication author',
+            hint: 'Any',
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _publicationTitleController,
             title: 'Publication title',
+            hint: 'Any',
           ),
           const Divider(),
-          _inputTile(
+          InputTile(
             controller: _publicationDateController,
             title: 'Publication date',
+            hint: 'Any',
           ),
           const Divider(),
 

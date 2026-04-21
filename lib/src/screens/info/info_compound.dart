@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/compound_model.dart';
+import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:eodb/src/util/slugify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +30,32 @@ class _InfoCompoundState extends State<InfoCompound> {
     );
     final json = jsonDecode(rawJson) as Map<String, dynamic>;
     return CompoundModel.fromJson(json);
+  }
+
+  Iterable<Widget> _generateContentList(CompoundModel model) sync* {
+    final sortedModels = model.oilContent!.toList()
+      ..sort(
+        (a, b) => b.percentage.compareTo(a.percentage),
+      );
+
+    for (final compoundModel in sortedModels) {
+      yield ListTile(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => InfoScreen(
+                name: compoundModel.name,
+                type: ItemType.oil,
+              ),
+            ),
+          );
+        },
+        title: Text(compoundModel.name),
+        subtitle: Text('${compoundModel.percentage}%'),
+      );
+      yield const Divider();
+    }
   }
 
   @override
@@ -91,13 +119,7 @@ class _InfoCompoundState extends State<InfoCompound> {
             ),
             const Divider(),
             if (model.oilContent != null && model.oilContent!.isNotEmpty)
-              for (final oilModel in model.oilContent!) ...[
-                ListTile(
-                  title: Text(oilModel.name),
-                  subtitle: Text(oilModel.percentage.toString()),
-                ),
-                const Divider(),
-              ],
+              ..._generateContentList(model),
           ],
         );
       },

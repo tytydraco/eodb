@@ -107,6 +107,15 @@ class _InfoOilState extends State<InfoOil> {
               subtitle: Text(model.publicationDate ?? 'N/A'),
             ),
             const Divider(),
+            if (model.compoundContent != null &&
+                model.compoundContent!.isNotEmpty)
+              for (final compoundModel in model.compoundContent!) ...[
+                ListTile(
+                  title: Text(compoundModel.name),
+                  subtitle: Text(compoundModel.percentage.toString()),
+                ),
+                const Divider(),
+              ],
           ],
         );
       },

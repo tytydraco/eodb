@@ -1,4 +1,5 @@
 import 'package:eodb/src/db/database.dart';
+import 'package:eodb/src/model/content_model.dart';
 
 /// The model for a compound derived from the [Database].
 class OilModel {
@@ -12,18 +13,37 @@ class OilModel {
     this.publicationAuthor,
     this.publicationTitle,
     this.publicationDate,
+    this.compoundContent,
   });
 
   /// Creates a new [OilModel] from [json] from EssentialOils.org.
-  OilModel.fromJson(Map<String, dynamic> json)
-    : id = json['id'] as int?,
-      name = json['name'] as String,
-      botanicalName = json['name_botanical'] as String?,
-      cas = json['CAS'] as String?,
-      imageUrl = json['image_url'] as String?,
-      publicationAuthor = json['abstract_author'] as String?,
-      publicationTitle = json['abstract_title'] as String?,
-      publicationDate = json['abstract_publication'] as String?;
+  factory OilModel.fromJson(Map<String, dynamic> json) {
+    final compounds = (json['compound'] as List<dynamic>?)
+        ?.cast<Map<String, dynamic>>();
+    final compoundContent = compounds
+        ?.map(
+          (compound) => ContentModel(
+            name: compound['name'] as String,
+            percentage: double.parse(
+              (compound['pivot'] as Map<String, dynamic>)['percentage_average']
+                  as String,
+            ),
+          ),
+        )
+        .toList();
+
+    return OilModel(
+      id: json['id'] as int?,
+      name: json['name'] as String,
+      botanicalName: json['name_botanical'] as String?,
+      cas: json['CAS'] as String?,
+      imageUrl: json['image_url'] as String?,
+      publicationAuthor: json['abstract_author'] as String?,
+      publicationTitle: json['abstract_title'] as String?,
+      publicationDate: json['abstract_publication'] as String?,
+      compoundContent: compoundContent,
+    );
+  }
 
   /// The EssentialOils.org oil ID.
   final int? id;
@@ -48,4 +68,7 @@ class OilModel {
 
   /// The abstract publication date.
   final String? publicationDate;
+
+  /// The list of compounds that the oil is present in.
+  final List<ContentModel>? compoundContent;
 }

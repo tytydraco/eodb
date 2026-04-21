@@ -1,5 +1,5 @@
 import 'package:eodb/src/db/database.dart';
-import 'package:eodb/src/model/compound_oil_content_model.dart';
+import 'package:eodb/src/model/content_model.dart';
 
 /// The model for a compound derived from the [Database].
 class CompoundModel {
@@ -17,7 +17,7 @@ class CompoundModel {
     final oils = (json['oil'] as List<dynamic>?)?.cast<Map<String, dynamic>>();
     final oilContent = oils
         ?.map(
-          (oil) => CompoundOilContentModel(
+          (oil) => ContentModel(
             name: oil['name'] as String,
             percentage: double.parse(
               (oil['pivot'] as Map<String, dynamic>)['percentage_average']
@@ -49,5 +49,5 @@ class CompoundModel {
   final String? imageUrl;
 
   /// The list of oils that the compound is present in.
-  final List<CompoundOilContentModel>? oilContent;
+  final List<ContentModel>? oilContent;
 }

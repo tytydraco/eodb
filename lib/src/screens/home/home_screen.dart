@@ -27,6 +27,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Future<void> _filterNames(String criteria) async {
     // TODO(tytydraco): Implement.
   }

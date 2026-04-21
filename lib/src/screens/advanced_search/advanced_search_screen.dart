@@ -1,5 +1,7 @@
+import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/advanced_search/item_content_criteria.dart';
+import 'package:eodb/src/widgets/database_list.dart';
 import 'package:eodb/src/widgets/input_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -27,20 +29,44 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   Widget _itemTypeSegmentedButton() {
     return ListTile(
       title: const Text('Item type'),
-      trailing: SegmentedButton<ItemType>(
-        onSelectionChanged: (itemTypeFilters) => setState(() {
-          _itemTypeFilters = itemTypeFilters;
-        }),
-        segments: ItemType.values
-            .map(
-              (type) => ButtonSegment(
-                value: type,
-                label: Text(type.displayName),
-              ),
-            )
-            .toList(),
-        selected: _itemTypeFilters,
-        multiSelectionEnabled: true,
+      trailing: SizedBox(
+        width: 200,
+        child: SegmentedButton<ItemType>(
+          onSelectionChanged: (itemTypeFilters) => setState(() {
+            _itemTypeFilters = itemTypeFilters;
+          }),
+          segments: ItemType.values
+              .map(
+                (type) => ButtonSegment(
+                  value: type,
+                  label: Text(type.displayName),
+                ),
+              )
+              .toList(),
+          selected: _itemTypeFilters,
+          showSelectedIcon: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showResults() async {
+    // Filter items by advanced criteria.
+    final filteredNames = await Database.instance.filterItemsByCriteria(
+      // TODO(tytydraco): Create advanced criteria model and pass to database
+    );
+
+    // Ensure we have not lost context.
+    if (!mounted) return;
+
+    // Show the filtered item names.
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => DatabaseList(
+          names: filteredNames,
+          type: _itemTypeFilters.first,
+        ),
       ),
     );
   }
@@ -50,6 +76,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Advanced Search'),
+        actions: [
+          IconButton(
+            onPressed: _showResults,
+            icon: const Icon(Icons.check),
+          ),
+        ],
       ),
       body: ListView(
         children: [

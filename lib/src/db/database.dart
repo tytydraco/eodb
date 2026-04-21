@@ -59,4 +59,9 @@ class Database {
     );
     return jsonDecode(rawJson) as Map<String, dynamic>;
   }
+
+  /// Returns a list of item names matching advanced criteria.
+  Future<List<String>> filterItemsByCriteria() async {
+    return [];
+  }
 }

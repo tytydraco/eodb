@@ -63,9 +63,6 @@ class _InfoCompoundState extends State<InfoCompound> {
     return FutureBuilder(
       future: _loadModelFromJson(),
       builder: (context, asyncSnapshot) {
-        if (asyncSnapshot.hasError) {
-          print(asyncSnapshot.error);
-        }
         if (!asyncSnapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),

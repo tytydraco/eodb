@@ -9,6 +9,7 @@ class DatabaseList extends StatefulWidget {
     required this.names,
     required this.type,
     this.criteria,
+    this.returnSelection = false,
     super.key,
   });
 
@@ -20,6 +21,9 @@ class DatabaseList extends StatefulWidget {
 
   /// Optional search criteria.
   final String? criteria;
+
+  /// Return the selection as a result.
+  final bool returnSelection;
 
   @override
   State<DatabaseList> createState() => _DatabaseListState();
@@ -61,7 +65,9 @@ class _DatabaseListState extends State<DatabaseList> {
         final name = filteredNames[index];
         return ListTile(
           title: Text(name),
-          onTap: () => _showInfo(name),
+          onTap: () => widget.returnSelection
+              ? Navigator.pop<String>(context, name)
+              : _showInfo(name),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),

@@ -23,7 +23,6 @@ class ItemSearchBar extends StatelessWidget {
       decoration: const InputDecoration(
         border: InputBorder.none,
         hint: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Search'),

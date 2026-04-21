@@ -22,6 +22,10 @@ class ItemContentCriteria extends StatefulWidget {
 }
 
 class _ItemContentCriteriaState extends State<ItemContentCriteria> {
+  late final List<String> db = (widget.type == ItemType.compound)
+      ? Database.instance.compoundNamesDb
+      : Database.instance.oilNamesDb;
+
   final _itemCriteriaFilters = <ItemCriteriaFilter>[];
 
   Future<void> _editFilter(int index) async {
@@ -69,44 +73,46 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     );
   }
 
+  Future<void> _addItem() async {
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute<String>(
+        builder: (context) => Material(
+          child: DatabaseList(
+            names: db,
+            type: widget.type,
+            returnSelection: true,
+          ),
+        ),
+      ),
+    );
+    if (result == null) return;
+
+    final filter = ItemCriteriaFilter(
+      name: result,
+      type: widget.type,
+      percentage: 0,
+      filterMode: FilterMode.equal,
+    );
+
+    setState(() {
+      _itemCriteriaFilters.add(filter);
+    });
+
+    // Immediately edit the newly added filter.
+    final index = _itemCriteriaFilters.indexOf(filter);
+    await _editFilter(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final db = (widget.type == ItemType.compound)
-        ? Database.instance.compoundNamesDb
-        : Database.instance.oilNamesDb;
-
     return Column(
       children: [
         ListTile(
           title: Text('${widget.type.displayName} filters'),
           trailing: IconButton(
-            onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                // Create the SelectionScreen in the next step.
-                MaterialPageRoute<String>(
-                  builder: (context) => Material(
-                    child: DatabaseList(
-                      names: db,
-                      type: widget.type,
-                      returnSelection: true,
-                    ),
-                  ),
-                ),
-              );
-              if (result == null) return;
-
-              setState(() {
-                _itemCriteriaFilters.add(
-                  ItemCriteriaFilter(
-                    name: result,
-                    type: ItemType.compound,
-                    percentage: 0,
-                    filterMode: FilterMode.equal,
-                  ),
-                );
-              });
-            },
+            onPressed: _addItem,
             icon: const Icon(Icons.add),
           ),
         ),

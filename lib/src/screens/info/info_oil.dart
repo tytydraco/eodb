@@ -3,6 +3,7 @@ import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/oil_model.dart';
 import 'package:eodb/src/widgets/eo_network_image.dart';
 import 'package:eodb/src/widgets/item_content_list.dart';
+import 'package:eodb/src/widgets/item_notes.dart';
 import 'package:flutter/material.dart';
 
 /// The info for an oil.
@@ -90,6 +91,8 @@ class _InfoOilState extends State<InfoOil> {
                 contentModels: model.compoundContent!,
                 type: ItemType.compound,
               ),
+            const Divider(),
+            ItemNotes(name: widget.name),
           ],
         );
       },

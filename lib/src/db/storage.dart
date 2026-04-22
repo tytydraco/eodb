@@ -22,18 +22,25 @@ class Storage {
   /// Save the [bookmarkedNames] to [_sharedPrefs].
   Future<void> _saveBookmarks() async {
     await initSharedPreferences();
-    await _sharedPrefs?.setStringList(
+    await _sharedPrefs!.setStringList(
       _sharedPrefsKeyBookmarks,
       bookmarkedNames.toList(),
     );
   }
 
-  /// Initialize the [_sharedPrefs] instance.
+  /// Initialize the [_sharedPrefs] instance and necessary values.
   Future<void> initSharedPreferences() async {
     // Do not reinitialize.
     if (_sharedPrefs != null) return;
 
     _sharedPrefs = await SharedPreferences.getInstance();
+
+    final savedBookmarkedNames = _sharedPrefs!.getStringList(
+      _sharedPrefsKeyBookmarks,
+    );
+    if (savedBookmarkedNames != null && savedBookmarkedNames.isNotEmpty) {
+      bookmarkedNames.addAll(savedBookmarkedNames);
+    }
   }
 
   /// Add a new item bookmark by [name].

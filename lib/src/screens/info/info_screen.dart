@@ -1,6 +1,7 @@
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/info/info_compound.dart';
 import 'package:eodb/src/screens/info/info_oil.dart';
+import 'package:eodb/src/widgets/bookmark_icon_button.dart';
 import 'package:flutter/material.dart';
 
 /// The details screen for a particular item.
@@ -28,6 +29,7 @@ class InfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
+        actions: [BookmarkIconButton(name: name)],
       ),
       body: infoWidget,
     );

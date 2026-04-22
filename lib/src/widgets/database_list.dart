@@ -1,6 +1,7 @@
 import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
+import 'package:eodb/src/widgets/bookmark_icon_button.dart';
 import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,9 @@ class _DatabaseListState extends State<DatabaseList> {
         ),
       ),
     );
+
+    // Update state in case bookmark status changed within info screen.
+    setState(() {});
   }
 
   /// Return a list of names that match the search criteria.
@@ -61,6 +65,17 @@ class _DatabaseListState extends State<DatabaseList> {
         .toList();
   }
 
+  /// Build a [ListTile] for each item.
+  Widget _buildItemListTile(String name) {
+    return ListTile(
+      title: Text(name),
+      trailing: BookmarkIconButton(name: name),
+      onTap: () => widget.returnSelection
+          ? Navigator.pop<String>(context, name)
+          : _showInfo(name),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredNames = _filterNames();
@@ -75,12 +90,7 @@ class _DatabaseListState extends State<DatabaseList> {
       body: ListView.separated(
         itemBuilder: (context, index) {
           final name = filteredNames[index];
-          return ListTile(
-            title: Text(name),
-            onTap: () => widget.returnSelection
-                ? Navigator.pop<String>(context, name)
-                : _showInfo(name),
-          );
+          return _buildItemListTile(name);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemCount: filteredNames.length,

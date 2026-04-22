@@ -11,7 +11,7 @@ Future<void> main() async {
 
   // Initialize the shared preferences instance.
   await Storage.instance.initSharedPreferences();
-  
+
   runApp(const EODB());
 }
 
@@ -23,6 +23,8 @@ class EODB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // TODO(tytydraco): Remove.
+      debugShowCheckedModeBanner: false,
       title: 'EODB',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),

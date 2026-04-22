@@ -2,6 +2,7 @@ import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/content_model.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:eodb/src/util/capitalize_string.dart';
+import 'package:eodb/src/widgets/item_content_chart.dart';
 import 'package:flutter/material.dart';
 
 /// A column holding the list of an item's compound or oil content.
@@ -53,6 +54,9 @@ class _ItemContentListState extends State<ItemContentList> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
+
+          // Chart.
+          ItemContentChart(contentModels: sortedContentModels),
 
           // List view of item content.
           ListView.separated(

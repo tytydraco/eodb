@@ -11,7 +11,7 @@ class CompoundsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DatabaseList(
-      names: Database.instance.compoundNamesDb,
+      names: Database.instance.compoundNamesDb.toList(),
       type: ItemType.compound,
     );
   }

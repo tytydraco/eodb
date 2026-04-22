@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:eodb/src/enum/item_type.dart';
@@ -19,10 +20,10 @@ class Database {
   static const oilsListAsset = 'assets/eoscraper/oil_list.json';
 
   /// The list of compounds in the list.
-  final List<String> compoundNamesDb = [];
+  final compoundNamesDb = HashSet<String>();
 
   /// The list of oils in the list.
-  final List<String> oilNamesDb = [];
+  final oilNamesDb = HashSet<String>();
 
   /// Returns all names from the asset file.
   Future<List<String>> _namesFromAsset(String assetPath) async {

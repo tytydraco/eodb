@@ -11,7 +11,7 @@ class OilsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DatabaseList(
-      names: Database.instance.oilNamesDb,
+      names: Database.instance.oilNamesDb.toList(),
       type: ItemType.oil,
     );
   }

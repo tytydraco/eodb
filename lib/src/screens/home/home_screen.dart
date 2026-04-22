@@ -31,8 +31,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  /// Present a split-screen view.
+  Widget _splitScreenView() {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(child: CompoundsTab()),
+        Expanded(child: OilsTab()),
+      ],
+    );
+  }
+
+  /// Present a tabbed view.
+  Widget _tabbedView() {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabController.index,
@@ -59,5 +70,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
+    if (screenSize.width < screenSize.height) return _tabbedView();
+    return _splitScreenView();
   }
 }

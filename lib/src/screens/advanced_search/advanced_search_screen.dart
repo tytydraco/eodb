@@ -28,8 +28,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   // Default to compounds because empty selection is disabled.
   var _itemTypeFilters = <ItemType>{ItemType.compound};
 
+  // The item filter criteria.
   final _itemCriteriaFiltersCompounds = <ItemCriteriaFilter>[];
   final _itemCriteriaFiltersOils = <ItemCriteriaFilter>[];
+
+  // Whether we are loading the results or not.
+  var _isLoadingResults = false;
 
   Widget _itemTypeSegmentedButton() {
     return ListTile(
@@ -70,6 +74,9 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           : _itemCriteriaFiltersOils,
     );
 
+    // Enable loading indicator.
+    setState(() => _isLoadingResults = true);
+
     // Filter items by advanced criteria.
     final filteredNames = await Database.instance.filterItemsByCriteria(
       searchCriteria,
@@ -88,10 +95,21 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         ),
       ),
     );
+
+    // Disable loading indicator.
+    setState(() => _isLoadingResults = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoadingResults) {
+      return const Material(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Advanced Search'),

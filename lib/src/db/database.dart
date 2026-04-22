@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eodb/src/enum/item_type.dart';
+import 'package:eodb/src/model/compound_model.dart';
 import 'package:eodb/src/model/oil_model.dart';
 import 'package:eodb/src/model/search_criteria.dart';
 import 'package:eodb/src/util/slugify.dart';
@@ -71,8 +72,116 @@ class Database {
       db.map((name) async => loadItemJson(name, type)).toList(),
     );
 
-    final items = jsons.map((json) async => OilModel.fromJson(json)).toList();
+    switch (type) {
+      // Compound.
+      case ItemType.compound:
+        final items = await Future.wait(
+          jsons.map((json) async => CompoundModel.fromJson(json)),
+        );
 
-    return [];
+        final filteredItems = items.where((item) {
+          // Name.
+          if (criteria.name != null &&
+              criteria.name!.isNotEmpty &&
+              item.name.toLowerCase().contains(criteria.name!.toLowerCase())) {
+            return true;
+          }
+
+          // ID.
+          if (criteria.id != null &&
+              criteria.id!.isNotEmpty &&
+              item.id != null &&
+              item.id.toString() == criteria.id!) {
+            return true;
+          }
+
+          // CAS #.
+          if (criteria.cas != null &&
+              criteria.cas!.isNotEmpty &&
+              item.cas != null &&
+              item.cas!.toLowerCase().contains(criteria.cas!.toLowerCase())) {
+            return true;
+          }
+
+          return false;
+        }).toList();
+
+        return filteredItems.map((item) => item.name).toList();
+
+      // Oil.
+      case ItemType.oil:
+        final items = await Future.wait(
+          jsons.map((json) async => OilModel.fromJson(json)),
+        );
+
+        final filteredItems = items.where((item) {
+          // Name.
+          if (criteria.name != null &&
+              criteria.name!.isNotEmpty &&
+              item.name.toLowerCase().contains(criteria.name!.toLowerCase())) {
+            return true;
+          }
+
+          // ID.
+          if (criteria.id != null &&
+              criteria.id!.isNotEmpty &&
+              item.id != null &&
+              item.id.toString() == criteria.id!) {
+            return true;
+          }
+
+          // Botanical name.
+          if (criteria.botanicalName != null &&
+              criteria.botanicalName!.isNotEmpty &&
+              item.botanicalName != null &&
+              item.botanicalName!.toLowerCase().contains(
+                criteria.botanicalName!.toLowerCase(),
+              )) {
+            return true;
+          }
+
+          // CAS #.
+          if (criteria.cas != null &&
+              criteria.cas!.isNotEmpty &&
+              item.cas != null &&
+              item.cas!.toLowerCase().contains(criteria.cas!.toLowerCase())) {
+            return true;
+          }
+
+          // Publication author.
+          if (criteria.publicationAuthor != null &&
+              criteria.publicationAuthor!.isNotEmpty &&
+              item.publicationAuthor != null &&
+              item.publicationAuthor!.toLowerCase().contains(
+                criteria.publicationAuthor!.toLowerCase(),
+              )) {
+            return true;
+          }
+
+          // Publication title.
+          if (criteria.publicationTitle != null &&
+              criteria.publicationTitle!.isNotEmpty &&
+              item.publicationTitle != null &&
+              item.publicationTitle!.toLowerCase().contains(
+                criteria.publicationTitle!.toLowerCase(),
+              )) {
+            return true;
+          }
+
+          // Publication date.
+          if (criteria.publicationDate != null &&
+              criteria.publicationDate!.isNotEmpty &&
+              item.publicationDate != null &&
+              item.publicationDate!.toLowerCase().contains(
+                criteria.publicationTitle!.toLowerCase(),
+              )) {
+            return true;
+          }
+
+          return false;
+        }).toList();
+
+        return filteredItems.map((item) => item.name).toList();
+    }
   }
 }

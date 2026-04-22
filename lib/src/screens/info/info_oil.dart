@@ -40,7 +40,7 @@ class _InfoOilState extends State<InfoOil> {
     yield* generateContentList(
       context,
       sortedModels,
-      ItemType.oil,
+      ItemType.compound,
     );
   }
 

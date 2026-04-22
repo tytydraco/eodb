@@ -38,29 +38,72 @@ class _ItemContentChartState extends State<ItemContentChart> {
     return HSLColor.fromAHSL(1, hue, 1, 0.6).toColor();
   }
 
+  /// Returns a list of included percentages and the excluded percentage.
+  (List<double>, double) _getPercentages() {
+    final percentages = widget.contentModels.map((model) => model.percentage);
+
+    // Sum of percentages that are <0.005% that should be grouped into "Other".
+    final excludedPercentages = percentages.where((percent) => percent < 0.005);
+    var excludedPercentage = excludedPercentages.fold<double>(
+      0,
+      (a, b) => a + b,
+    );
+
+    // If we are showing the "Other" section, percentages >0.005% should be
+    // shown independently.
+    var includedPercentages = excludedPercentage != 0
+        ? percentages.where((percent) => percent >= 0.005).toList()
+        : percentages.toList();
+
+    // If we only have excluded percentages, treat it as the included
+    // percentages.
+    if (includedPercentages.isEmpty) {
+      includedPercentages = excludedPercentages.toList();
+      excludedPercentage = 0;
+    }
+
+    return (includedPercentages, excludedPercentage);
+  }
+
   @override
   Widget build(BuildContext context) {
     final percentages = widget.contentModels.map((model) => model.percentage);
     final maxPercentage = percentages.reduce(max);
     final minPercentage = percentages.reduce(min);
 
-    final sections = widget.contentModels
-        .asMap()
-        .entries
-        .map(
-          (entries) => PieChartSectionData(
-            value: entries.value.percentage,
-            showTitle: false,
-            radius: 100,
-            color: _colorByIndex(
-              index: entries.key,
-              percentage: entries.value.percentage,
-              minPercentage: minPercentage,
-              maxPercentage: maxPercentage,
-            ),
-          ),
-        )
-        .toList();
+    final (includedPercentages, excludedPercentage) = _getPercentages();
+
+    final sections =
+        // Add the included percentages.
+        includedPercentages
+            .asMap()
+            .entries
+            .map(
+              (entry) => PieChartSectionData(
+                value: entry.value,
+                showTitle: false,
+                radius: 100,
+                color: _colorByIndex(
+                  index: entry.key,
+                  percentage: entry.value,
+                  minPercentage: minPercentage,
+                  maxPercentage: maxPercentage,
+                ),
+              ),
+            )
+            .toList();
+
+    // Add "Other" category if there is data to present.
+    if (excludedPercentage != 0) {
+      sections.add(
+        PieChartSectionData(
+          value: excludedPercentage,
+          showTitle: false,
+          radius: 100,
+          color: Colors.brown.shade900,
+        ),
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.all(20),

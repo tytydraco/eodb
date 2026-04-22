@@ -9,6 +9,7 @@
 
 struct _MyApplication {
   GtkApplication parent_instance;
+  GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
 };
 

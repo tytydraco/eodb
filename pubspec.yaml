@@ -1,5 +1,5 @@
 name: eodb
-description: "Essential oil database."
+description: 'Essential oil database.'
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -16,6 +16,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  icons_launcher: ^3.1.0
   very_good_analysis: ^10.0.0
 
 flutter:
@@ -24,3 +25,19 @@ flutter:
     - assets/eoscraper/
     - assets/eoscraper/compounds/
     - assets/eoscraper/oils/
+
+icons_launcher:
+  image_path: 'assets/icon.png'
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+    macos:
+      enable: true
+    windows:
+      enable: true
+    web:
+      enable: true
+    linux:
+      enable: true

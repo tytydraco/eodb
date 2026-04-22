@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eodb/src/enum/filter_mode.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/compound_model.dart';
 import 'package:eodb/src/model/oil_model.dart';
@@ -101,6 +102,55 @@ class Database {
               item.cas != null &&
               item.cas!.toLowerCase().contains(criteria.cas!.toLowerCase())) {
             return true;
+          }
+
+          // Item content.
+          if (criteria.itemContentCriteria != null) {
+            for (final itemCriteriaFilter in criteria.itemContentCriteria!) {
+              final filteredItemContent = item.oilContent?.where((content) {
+                // Name.
+                if (itemCriteriaFilter.name != content.name) return false;
+
+                // Greater than.
+                if (itemCriteriaFilter.filterMode == FilterMode.greaterThan &&
+                    itemCriteriaFilter.percentage > content.percentage) {
+                  return true;
+                }
+
+                // Greater than or equal.
+                if (itemCriteriaFilter.filterMode ==
+                        FilterMode.greaterThanOrEqual &&
+                    itemCriteriaFilter.percentage >= content.percentage) {
+                  return true;
+                }
+
+                // Less than.
+                if (itemCriteriaFilter.filterMode == FilterMode.lessThan &&
+                    itemCriteriaFilter.percentage < content.percentage) {
+                  return true;
+                }
+
+                // Less than or equal.
+                if (itemCriteriaFilter.filterMode == FilterMode.lessThan &&
+                    itemCriteriaFilter.percentage <= content.percentage) {
+                  return true;
+                }
+
+                // Equal.
+                if (itemCriteriaFilter.filterMode == FilterMode.equal &&
+                    itemCriteriaFilter.percentage == content.percentage) {
+                  return true;
+                }
+
+                // Not equal.
+                if (itemCriteriaFilter.filterMode == FilterMode.notEqual &&
+                    itemCriteriaFilter.percentage != content.percentage) {
+                  return true;
+                }
+
+                return false;
+              });
+            }
           }
 
           return false;

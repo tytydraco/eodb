@@ -5,15 +5,15 @@ import 'package:eodb/src/model/item_criteria_filter.dart';
 class SearchCriteria {
   /// Creates a new [SearchCriteria].
   SearchCriteria({
-    required this.id,
-    required this.name,
-    required this.botanicalName,
-    required this.cas,
-    required this.publicationAuthor,
-    required this.publicationTitle,
-    required this.publicationDate,
     required this.type,
-    required this.itemContentCriteria,
+    this.id,
+    this.name,
+    this.botanicalName,
+    this.cas,
+    this.publicationAuthor,
+    this.publicationTitle,
+    this.publicationDate,
+    this.itemContentCriteria,
   });
 
   /// The ID criteria.
@@ -41,5 +41,5 @@ class SearchCriteria {
   final ItemType type;
 
   /// The item content criteria.
-  final List<ItemCriteriaFilter> itemContentCriteria;
+  final List<ItemCriteriaFilter>? itemContentCriteria;
 }

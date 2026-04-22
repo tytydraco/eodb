@@ -37,7 +37,7 @@ class _InfoOilState extends State<InfoOil> {
         (a, b) => b.percentage.compareTo(a.percentage),
       );
 
-    yield* generateContentList(
+    yield* generateItemContentList(
       context,
       sortedModels,
       ItemType.compound,

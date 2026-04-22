@@ -37,7 +37,7 @@ class _InfoCompoundState extends State<InfoCompound> {
         (a, b) => b.percentage.compareTo(a.percentage),
       );
 
-    yield* generateContentList(
+    yield* generateItemContentList(
       context,
       sortedModels,
       ItemType.oil,

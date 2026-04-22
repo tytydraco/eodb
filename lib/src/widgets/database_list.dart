@@ -1,6 +1,5 @@
 import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
-import 'package:eodb/src/screens/advanced_search/advanced_search_screen.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:eodb/src/widgets/item_search_bar.dart';
 import 'package:flutter/material.dart';
@@ -62,16 +61,6 @@ class _DatabaseListState extends State<DatabaseList> {
         .toList();
   }
 
-  /// Show the advanced search page.
-  Future<void> _showAdvancedSearch() async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => const AdvancedSearchScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final filteredNames = _filterNames();
@@ -82,12 +71,6 @@ class _DatabaseListState extends State<DatabaseList> {
           controller: _searchController,
           onChanged: (criteria) async => setState(() => _criteria = criteria),
         ),
-        actions: [
-          IconButton(
-            onPressed: _showAdvancedSearch,
-            icon: const Icon(Icons.location_searching),
-          ),
-        ],
       ),
       body: ListView.separated(
         itemBuilder: (context, index) {

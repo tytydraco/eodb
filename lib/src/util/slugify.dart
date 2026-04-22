@@ -3,10 +3,9 @@ import 'package:diacritic/diacritic.dart';
 /// Converts the [content] to a slug.
 String slugify(String content, {bool allowUnicode = false}) {
   var value = content;
-  if (!allowUnicode) {
-    // Remove accents/diacritics (similar to NFKD + ascii ignore)
-    value = removeDiacritics(value);
-  }
+
+  // Remove unicode if necessary.
+  if (!allowUnicode) value = removeDiacritics(value);
 
   // Lowercase.
   value = value.toLowerCase();

@@ -4,7 +4,7 @@ import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:flutter/material.dart';
 
 /// Given a list of [contentModels], yield sorted [ListTile]s with [Divider]s.
-Iterable<Widget> generateContentList(
+Iterable<Widget> generateItemContentList(
   BuildContext context,
   List<ContentModel> contentModels,
   ItemType type,

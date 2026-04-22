@@ -4,7 +4,7 @@ import 'package:eodb/src/screens/info/info_oil.dart';
 import 'package:flutter/material.dart';
 
 /// The details screen for a particular item.
-class InfoScreen extends StatefulWidget {
+class InfoScreen extends StatelessWidget {
   /// Creates a new [InfoScreen].
   const InfoScreen({
     required this.name,
@@ -19,20 +19,15 @@ class InfoScreen extends StatefulWidget {
   final ItemType type;
 
   @override
-  State<InfoScreen> createState() => _InfoScreenState();
-}
-
-class _InfoScreenState extends State<InfoScreen> {
-  @override
   Widget build(BuildContext context) {
     // Choose the correct info screen based on the item type.
-    final infoWidget = (widget.type == ItemType.compound)
-        ? InfoCompound(name: widget.name)
-        : InfoOil(name: widget.name);
+    final infoWidget = (type == ItemType.compound)
+        ? InfoCompound(name: name)
+        : InfoOil(name: name);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: Text(name),
       ),
       body: infoWidget,
     );

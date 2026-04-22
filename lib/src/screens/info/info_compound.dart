@@ -30,19 +30,6 @@ class _InfoCompoundState extends State<InfoCompound> {
     return CompoundModel.fromJson(json);
   }
 
-  /// Generate the content list.
-  Widget _generateContentList(CompoundModel model) {
-    final sortedModels = model.oilContent!.toList()
-      ..sort(
-        (a, b) => b.percentage.compareTo(a.percentage),
-      );
-
-    return ItemContentList(
-      contentModels: sortedModels,
-      type: ItemType.oil,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -78,7 +65,10 @@ class _InfoCompoundState extends State<InfoCompound> {
             ),
             const Divider(),
             if (model.oilContent != null && model.oilContent!.isNotEmpty)
-              _generateContentList(model),
+              ItemContentList(
+                contentModels: model.oilContent!,
+                type: ItemType.oil,
+              ),
           ],
         );
       },

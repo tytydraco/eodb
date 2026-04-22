@@ -30,19 +30,6 @@ class _InfoOilState extends State<InfoOil> {
     return OilModel.fromJson(json);
   }
 
-  /// Generate the content list.
-  Widget _generateContentList(OilModel model) {
-    final sortedModels = model.compoundContent!.toList()
-      ..sort(
-        (a, b) => b.percentage.compareTo(a.percentage),
-      );
-
-    return ItemContentList(
-      contentModels: sortedModels,
-      type: ItemType.compound,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -99,7 +86,10 @@ class _InfoOilState extends State<InfoOil> {
             const Divider(),
             if (model.compoundContent != null &&
                 model.compoundContent!.isNotEmpty)
-              _generateContentList(model),
+              ItemContentList(
+                contentModels: model.compoundContent!,
+                type: ItemType.compound,
+              ),
           ],
         );
       },

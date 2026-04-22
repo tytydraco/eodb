@@ -31,16 +31,15 @@ class _InfoOilState extends State<InfoOil> {
   }
 
   /// Generate the content list.
-  Iterable<Widget> _generateContentList(OilModel model) sync* {
+  Widget _generateContentList(OilModel model) {
     final sortedModels = model.compoundContent!.toList()
       ..sort(
         (a, b) => b.percentage.compareTo(a.percentage),
       );
 
-    yield* generateItemContentList(
-      context,
-      sortedModels,
-      ItemType.compound,
+    return ItemContentList(
+      contentModels: sortedModels,
+      type: ItemType.compound,
     );
   }
 
@@ -100,7 +99,7 @@ class _InfoOilState extends State<InfoOil> {
             const Divider(),
             if (model.compoundContent != null &&
                 model.compoundContent!.isNotEmpty)
-              ..._generateContentList(model),
+              _generateContentList(model),
           ],
         );
       },

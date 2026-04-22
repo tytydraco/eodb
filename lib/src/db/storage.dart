@@ -45,13 +45,29 @@ class Storage {
 
   /// Add a new item bookmark by [name].
   Future<void> addBookmark(String name) async {
+    await initSharedPreferences();
     bookmarkedNames.add(name);
     await _saveBookmarks();
   }
 
   /// Remove an item bookmark by [name].
   Future<void> removeBookmark(String name) async {
+    await initSharedPreferences();
     bookmarkedNames.remove(name);
     await _saveBookmarks();
+  }
+
+  /// Set an item's notes by [name] given the note's [content].
+  Future<void> setNotes(String name, String content) async {
+    await initSharedPreferences();
+    final sharedPrefsKeyItemNote = '${name}_notes';
+    await _sharedPrefs!.setString(sharedPrefsKeyItemNote, content);
+  }
+
+  /// Get an item's notes by [name].
+  Future<String?> getNotes(String name) async {
+    await initSharedPreferences();
+    final sharedPrefsKeyItemNote = '${name}_notes';
+    return _sharedPrefs!.getString(sharedPrefsKeyItemNote);
   }
 }

@@ -46,7 +46,7 @@ class _DatabaseListState extends State<DatabaseList> {
     );
 
     // Update state in case bookmark status changed within info screen.
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   /// Return a list of names that match the search criteria.

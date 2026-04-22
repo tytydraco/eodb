@@ -31,13 +31,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  /// Present a split-screen view.
+  /// Present a split-screen view with independent navigators for subpages.
   Widget _splitScreenView() {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Expanded(child: CompoundsTab()),
-        Expanded(child: OilsTab()),
+        Expanded(
+          child: Navigator(
+            onGenerateInitialRoutes: (_, _) => [
+              MaterialPageRoute(builder: (context) => const CompoundsTab()),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Navigator(
+            onGenerateInitialRoutes: (_, _) => [
+              MaterialPageRoute(builder: (context) => const OilsTab()),
+            ],
+          ),
+        ),
       ],
     );
   }

@@ -49,10 +49,9 @@ class _ItemContentChartState extends State<ItemContentChart> {
         .entries
         .map(
           (entries) => PieChartSectionData(
-            cornerRadius: 0,
-            radius: 50,
             value: entries.value.percentage,
             showTitle: false,
+            radius: 100,
             color: _colorByIndex(
               index: entries.key,
               percentage: entries.value.percentage,
@@ -71,6 +70,7 @@ class _ItemContentChartState extends State<ItemContentChart> {
         child: PieChart(
           PieChartData(
             sections: sections,
+            centerSpaceRadius: 0,
             sectionsSpace: 0,
             pieTouchData: PieTouchData(
               enabled: true,

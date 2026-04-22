@@ -51,26 +51,22 @@ class _DatabaseListState extends State<DatabaseList> {
 
   /// Return a list of names that match the search criteria.
   List<String> _filterNames() {
-    // Sort by name, ascending.
-    final sortedNamesAscending = widget.names.toList()
-      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-
-    // Sort by bookmarked items.
-    final sortedNamesBookmarked = sortedNamesAscending.toList()
+    // Sort by bookmarked items, then by name in ascending order.
+    final sortedNames = widget.names.toList()
       ..sort((a, b) {
         final aIsBookmarked = Storage.instance.bookmarkedNames.contains(a);
         final bIsBookmarked = Storage.instance.bookmarkedNames.contains(b);
 
         if (aIsBookmarked && !bIsBookmarked) return -1;
         if (!aIsBookmarked && bIsBookmarked) return 1;
-        return 0;
+        return a.toLowerCase().compareTo(b.toLowerCase());
       });
 
     // No search criteria specified.
-    if (_criteria == null) return sortedNamesBookmarked;
+    if (_criteria == null) return sortedNames;
 
     // Only return matching results.
-    return sortedNamesBookmarked
+    return sortedNames
         .where(
           (name) => name.toLowerCase().contains(_criteria!.toLowerCase()),
         )

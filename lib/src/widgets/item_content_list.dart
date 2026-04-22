@@ -22,7 +22,9 @@ Iterable<Widget> generateContentList(
     );
   }
 
-  for (final contentModel in contentModels) {
+  final sortedContentModels = contentModels.toList()
+    ..sort((a, b) => b.percentage.compareTo(a.percentage));
+  for (final contentModel in sortedContentModels) {
     yield ListTile(
       onTap: () async => showInfo(contentModel.name),
       title: Text(contentModel.name),

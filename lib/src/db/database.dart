@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:eodb/src/enum/filter_mode.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/compound_model.dart';
 import 'package:eodb/src/model/oil_model.dart';
@@ -83,8 +82,10 @@ class Database {
         final filteredItems = items.where((item) {
           // Name.
           if (criteria.name != null &&
-              criteria.name!.isNotEmpty &&
-              item.name.toLowerCase().contains(criteria.name!.toLowerCase())) {
+              (criteria.name!.isEmpty ||
+                  item.name.toLowerCase().contains(
+                    criteria.name!.toLowerCase(),
+                  ))) {
             return true;
           }
 
@@ -107,49 +108,17 @@ class Database {
           // Item content.
           if (criteria.itemContentCriteria != null) {
             for (final itemCriteriaFilter in criteria.itemContentCriteria!) {
-              final filteredItemContent = item.oilContent?.where((content) {
+              final itemContentMatches = item.oilContent?.map((content) {
                 // Name.
                 if (itemCriteriaFilter.name != content.name) return false;
 
-                // Greater than.
-                if (itemCriteriaFilter.filterMode == FilterMode.greaterThan &&
-                    itemCriteriaFilter.percentage > content.percentage) {
-                  return true;
-                }
-
-                // Greater than or equal.
-                if (itemCriteriaFilter.filterMode ==
-                        FilterMode.greaterThanOrEqual &&
-                    itemCriteriaFilter.percentage >= content.percentage) {
-                  return true;
-                }
-
-                // Less than.
-                if (itemCriteriaFilter.filterMode == FilterMode.lessThan &&
-                    itemCriteriaFilter.percentage < content.percentage) {
-                  return true;
-                }
-
-                // Less than or equal.
-                if (itemCriteriaFilter.filterMode == FilterMode.lessThan &&
-                    itemCriteriaFilter.percentage <= content.percentage) {
-                  return true;
-                }
-
-                // Equal.
-                if (itemCriteriaFilter.filterMode == FilterMode.equal &&
-                    itemCriteriaFilter.percentage == content.percentage) {
-                  return true;
-                }
-
-                // Not equal.
-                if (itemCriteriaFilter.filterMode == FilterMode.notEqual &&
-                    itemCriteriaFilter.percentage != content.percentage) {
-                  return true;
-                }
-
-                return false;
+                // Compare percentages against filter mode.
+                return itemCriteriaFilter.filterMode.compare(
+                  itemCriteriaFilter.percentage,
+                  content.percentage,
+                );
               });
+              if (itemContentMatches?.contains(false) ?? false) return false;
             }
           }
 
@@ -167,8 +136,10 @@ class Database {
         final filteredItems = items.where((item) {
           // Name.
           if (criteria.name != null &&
-              criteria.name!.isNotEmpty &&
-              item.name.toLowerCase().contains(criteria.name!.toLowerCase())) {
+              (criteria.name!.isEmpty ||
+                  item.name.toLowerCase().contains(
+                    criteria.name!.toLowerCase(),
+                  ))) {
             return true;
           }
 
@@ -182,50 +153,69 @@ class Database {
 
           // Botanical name.
           if (criteria.botanicalName != null &&
-              criteria.botanicalName!.isNotEmpty &&
-              item.botanicalName != null &&
-              item.botanicalName!.toLowerCase().contains(
-                criteria.botanicalName!.toLowerCase(),
-              )) {
+              (criteria.botanicalName!.isEmpty ||
+                  item.botanicalName!.toLowerCase().contains(
+                    criteria.botanicalName!.toLowerCase(),
+                  ))) {
             return true;
           }
 
           // CAS #.
           if (criteria.cas != null &&
-              criteria.cas!.isNotEmpty &&
-              item.cas != null &&
-              item.cas!.toLowerCase().contains(criteria.cas!.toLowerCase())) {
+              (criteria.cas!.isEmpty ||
+                  item.cas!.toLowerCase().contains(
+                    criteria.cas!.toLowerCase(),
+                  ))) {
             return true;
           }
 
           // Publication author.
           if (criteria.publicationAuthor != null &&
-              criteria.publicationAuthor!.isNotEmpty &&
-              item.publicationAuthor != null &&
-              item.publicationAuthor!.toLowerCase().contains(
-                criteria.publicationAuthor!.toLowerCase(),
-              )) {
+              (criteria.publicationAuthor!.isEmpty ||
+                  item.publicationAuthor!.toLowerCase().contains(
+                    criteria.publicationAuthor!.toLowerCase(),
+                  ))) {
             return true;
           }
 
           // Publication title.
           if (criteria.publicationTitle != null &&
-              criteria.publicationTitle!.isNotEmpty &&
-              item.publicationTitle != null &&
-              item.publicationTitle!.toLowerCase().contains(
-                criteria.publicationTitle!.toLowerCase(),
-              )) {
+              (criteria.publicationTitle!.isEmpty ||
+                  item.publicationTitle!.toLowerCase().contains(
+                    criteria.publicationTitle!.toLowerCase(),
+                  ))) {
             return true;
           }
 
           // Publication date.
           if (criteria.publicationDate != null &&
-              criteria.publicationDate!.isNotEmpty &&
-              item.publicationDate != null &&
-              item.publicationDate!.toLowerCase().contains(
-                criteria.publicationTitle!.toLowerCase(),
-              )) {
+              (criteria.publicationDate!.isEmpty ||
+                  item.publicationDate!.toLowerCase().contains(
+                    criteria.publicationDate!.toLowerCase(),
+                  ))) {
             return true;
+          }
+
+          // Item content.
+          print(criteria.itemContentCriteria);
+          if (criteria.itemContentCriteria != null) {
+            for (final itemCriteriaFilter in criteria.itemContentCriteria!) {
+              final itemContentMatches = item.compoundContent?.map((content) {
+                print(itemCriteriaFilter.name);
+                print(itemCriteriaFilter.percentage);
+                print(itemCriteriaFilter.type.displayName);
+
+                // Name.
+                if (itemCriteriaFilter.name != content.name) return false;
+
+                // Compare percentages against filter mode.
+                return itemCriteriaFilter.filterMode.compare(
+                  itemCriteriaFilter.percentage,
+                  content.percentage,
+                );
+              });
+              if (itemContentMatches?.contains(false) ?? false) return false;
+            }
           }
 
           return false;

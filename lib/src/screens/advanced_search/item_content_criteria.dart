@@ -26,10 +26,6 @@ class ItemContentCriteria extends StatefulWidget {
 }
 
 class _ItemContentCriteriaState extends State<ItemContentCriteria> {
-  late final List<String> db = (widget.type == ItemType.compound)
-      ? Database.instance.compoundNamesDb
-      : Database.instance.oilNamesDb;
-
   /// Edit an existing filter from the list.
   Future<void> _editFilter(int index) async {
     final filter = widget.itemCriteriaFilters[index];
@@ -52,7 +48,13 @@ class _ItemContentCriteriaState extends State<ItemContentCriteria> {
     }
   }
 
+  /// Add a new item.
   Future<void> _addItem() async {
+    // Provide the correct name database.
+    final db = (widget.type == ItemType.compound)
+        ? Database.instance.compoundNamesDb
+        : Database.instance.oilNamesDb;
+
     final result = await Navigator.push(
       context,
       // Create the SelectionScreen in the next step.

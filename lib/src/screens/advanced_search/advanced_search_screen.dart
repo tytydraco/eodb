@@ -185,10 +185,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
 
           // Compound criteria.
           ItemContentCriteria(
-            type: _itemTypeFilters.first,
+            type: (_itemTypeFilters.first == ItemType.compound)
+                ? ItemType.oil
+                : ItemType.compound,
             itemCriteriaFilters: (_itemTypeFilters.first == ItemType.compound)
-                ? _itemCriteriaFiltersCompounds
-                : _itemCriteriaFiltersOils,
+                ? _itemCriteriaFiltersOils
+                : _itemCriteriaFiltersCompounds,
           ),
           const Divider(),
         ],

@@ -22,4 +22,22 @@ enum FilterMode {
 
   /// The display name for the filter mode.
   final String displayName;
+
+  /// Compare the [lhs] with the [rhs].
+  bool compare(double lhs, double rhs) {
+    switch (this) {
+      case FilterMode.greaterThan:
+        return lhs > rhs;
+      case FilterMode.greaterThanOrEqual:
+        return lhs >= rhs;
+      case FilterMode.lessThan:
+        return lhs < rhs;
+      case FilterMode.lessThanOrEqual:
+        return lhs <= rhs;
+      case FilterMode.equal:
+        return lhs == rhs;
+      case FilterMode.notEqual:
+        return lhs != rhs;
+    }
+  }
 }

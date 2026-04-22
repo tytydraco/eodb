@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 /// Assets for compounds and oils.
 class Database {
-  // Private constructor necessary for singleton access.
+  /// Private constructor necessary for singleton access.
   Database._();
 
   /// Singleton instance of the [Database].

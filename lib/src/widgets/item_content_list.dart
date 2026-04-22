@@ -44,7 +44,7 @@ class _ItemContentListState extends State<ItemContentList> {
       ..sort((a, b) => b.percentage.compareTo(a.percentage));
 
     return Card(
-      margin: const EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
           // Category label.

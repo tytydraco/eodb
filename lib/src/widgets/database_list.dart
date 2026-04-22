@@ -99,6 +99,7 @@ class _DatabaseListState extends State<DatabaseList> {
       appBar: AppBar(
         title: ItemSearchBar(
           controller: _searchController,
+          type: widget.type,
           onChanged: (criteria) async => setState(() => _criteria = criteria),
         ),
       ),

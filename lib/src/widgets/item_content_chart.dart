@@ -33,7 +33,7 @@ class _ItemContentChartState extends State<ItemContentChart> {
 
     final normalizedPercentage =
         (percentage - minPercentage) / (maxPercentage - minPercentage);
-    final hue = ((1 - normalizedPercentage) * 360).clamp(0, 360).toDouble();
+    final hue = (1 - normalizedPercentage) * 300;
 
     return HSLColor.fromAHSL(1, hue, 1, 0.6).toColor();
   }
@@ -49,8 +49,8 @@ class _ItemContentChartState extends State<ItemContentChart> {
         .entries
         .map(
           (entries) => PieChartSectionData(
-            cornerRadius: 10,
-            radius: 20,
+            cornerRadius: 0,
+            radius: 50,
             value: entries.value.percentage,
             showTitle: false,
             color: _colorByIndex(
@@ -71,6 +71,7 @@ class _ItemContentChartState extends State<ItemContentChart> {
         child: PieChart(
           PieChartData(
             sections: sections,
+            sectionsSpace: 0,
             pieTouchData: PieTouchData(
               enabled: true,
             ),

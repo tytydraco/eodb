@@ -58,19 +58,18 @@ class _ItemContentListState extends State<ItemContentList> {
           // Chart.
           ItemContentChart(contentModels: sortedContentModels),
 
-          // List view of item content.
-          ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final contentModel = sortedContentModels[index];
-              return ListTile(
-                onTap: () async => _showInfo(contentModel.name),
-                title: Text(contentModel.name),
-                subtitle: Text('${contentModel.percentage}%'),
-              );
-            },
-            separatorBuilder: (_, _) => const Divider(),
-            itemCount: sortedContentModels.length,
+          // Column of item content.
+          Column(
+            children: [
+              for (final contentModel in sortedContentModels) ...[
+                const Divider(),
+                ListTile(
+                  onTap: () async => _showInfo(contentModel.name),
+                  title: Text(contentModel.name),
+                  subtitle: Text('${contentModel.percentage}%'),
+                ),
+              ],
+            ],
           ),
         ],
       ),

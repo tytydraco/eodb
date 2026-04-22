@@ -26,10 +26,13 @@ class _ItemContentChartState extends State<ItemContentChart> {
     required double minPercentage,
     required double maxPercentage,
   }) {
+    // If there's a single item, return Red.
+    if (maxPercentage == minPercentage) {
+      return const HSLColor.fromAHSL(1, 0, 1, 0.6).toColor();
+    }
+
     final normalizedPercentage =
         (percentage - minPercentage) / (maxPercentage - minPercentage);
-
-    // TODO(tytydraco): figure out why we need to clamp (max - min = 0)
     final hue = ((1 - normalizedPercentage) * 360).clamp(0, 360).toDouble();
 
     return HSLColor.fromAHSL(1, hue, 1, 0.6).toColor();

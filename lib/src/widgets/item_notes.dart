@@ -30,7 +30,7 @@ class _ItemNotesState extends State<ItemNotes> {
       Storage.instance.getNotes(widget.name).then((content) {
         if (content == null || content.isEmpty) return;
         if (!mounted) return;
-        
+
         setState(() {
           _notesController.text = content;
         });
@@ -41,7 +41,7 @@ class _ItemNotesState extends State<ItemNotes> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
           // Category label.

@@ -44,6 +44,7 @@ class _InfoOilState extends State<InfoOil> {
 
         final model = asyncSnapshot.data!;
         return ListView(
+          padding: const EdgeInsets.only(bottom: 10),
           children: [
             ListTile(
               title: const Text('Image'),
@@ -85,14 +86,14 @@ class _InfoOilState extends State<InfoOil> {
               subtitle: Text(model.publicationDate ?? 'N/A'),
             ),
             const Divider(),
+            ItemNotes(name: widget.name),
+            const Divider(),
             if (model.compoundContent != null &&
                 model.compoundContent!.isNotEmpty)
               ItemContentList(
                 contentModels: model.compoundContent!,
                 type: ItemType.compound,
               ),
-            const Divider(),
-            ItemNotes(name: widget.name),
           ],
         );
       },

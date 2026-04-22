@@ -44,6 +44,7 @@ class _InfoCompoundState extends State<InfoCompound> {
 
         final model = asyncSnapshot.data!;
         return ListView(
+          padding: const EdgeInsets.only(bottom: 10),
           children: [
             ListTile(
               title: const Text('Molecule'),
@@ -65,13 +66,13 @@ class _InfoCompoundState extends State<InfoCompound> {
               subtitle: Text(model.cas ?? 'N/A'),
             ),
             const Divider(),
+            ItemNotes(name: widget.name),
+            const Divider(),
             if (model.oilContent != null && model.oilContent!.isNotEmpty)
               ItemContentList(
                 contentModels: model.oilContent!,
                 type: ItemType.oil,
               ),
-            const Divider(),
-            ItemNotes(name: widget.name),
           ],
         );
       },

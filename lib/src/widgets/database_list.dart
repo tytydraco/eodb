@@ -1,4 +1,5 @@
 import 'package:eodb/src/db/database.dart';
+import 'package:eodb/src/db/storage.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/screens/info/info_screen.dart';
 import 'package:eodb/src/widgets/bookmark_icon_button.dart';
@@ -51,14 +52,25 @@ class _DatabaseListState extends State<DatabaseList> {
   /// Return a list of names that match the search criteria.
   List<String> _filterNames() {
     // Sort by name, ascending.
-    final sortedNames = widget.names.toList()
+    final sortedNamesAscending = widget.names.toList()
       ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
+    // Sort by bookmarked items.
+    final sortedNamesBookmarked = sortedNamesAscending.toList()
+      ..sort((a, b) {
+        final aIsBookmarked = Storage.instance.bookmarkedNames.contains(a);
+        final bIsBookmarked = Storage.instance.bookmarkedNames.contains(b);
+
+        if (aIsBookmarked && !bIsBookmarked) return -1;
+        if (!aIsBookmarked && bIsBookmarked) return 1;
+        return 0;
+      });
+
     // No search criteria specified.
-    if (_criteria == null) return sortedNames;
+    if (_criteria == null) return sortedNamesBookmarked;
 
     // Only return matching results.
-    return sortedNames
+    return sortedNamesBookmarked
         .where(
           (name) => name.toLowerCase().contains(_criteria!.toLowerCase()),
         )
@@ -69,7 +81,10 @@ class _DatabaseListState extends State<DatabaseList> {
   Widget _buildItemListTile(String name) {
     return ListTile(
       title: Text(name),
-      trailing: BookmarkIconButton(name: name),
+      trailing: BookmarkIconButton(
+        name: name,
+        onChanged: () => setState(() {}),
+      ),
       onTap: () => widget.returnSelection
           ? Navigator.pop<String>(context, name)
           : _showInfo(name),

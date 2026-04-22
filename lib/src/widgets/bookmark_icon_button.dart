@@ -6,11 +6,15 @@ class BookmarkIconButton extends StatefulWidget {
   /// Creates a new [BookmarkIconButton].
   const BookmarkIconButton({
     required this.name,
+    this.onChanged,
     super.key,
   });
 
   /// The item name.
   final String name;
+
+  /// Called when the bookmark status has changed.
+  final void Function()? onChanged;
 
   @override
   State<BookmarkIconButton> createState() => _BookmarkIconButtonState();
@@ -27,6 +31,8 @@ class _BookmarkIconButtonState extends State<BookmarkIconButton> {
             ? await Storage.instance.removeBookmark(widget.name)
             : await Storage.instance.addBookmark(widget.name);
         setState(() {});
+
+        widget.onChanged?.call();
       },
       icon: const Icon(Icons.star_border),
       selectedIcon: const Icon(Icons.star),

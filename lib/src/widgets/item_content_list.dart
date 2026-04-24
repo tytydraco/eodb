@@ -43,36 +43,33 @@ class _ItemContentListState extends State<ItemContentList> {
     final sortedContentModels = widget.contentModels.toList()
       ..sort((a, b) => b.percentage.compareTo(a.percentage));
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          // Category label.
-          ListTile(
-            title: Text(
-              '${widget.type.displayName.capitalize()} content:',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+    return Column(
+      children: [
+        // Category label.
+        ListTile(
+          title: Text(
+            '${widget.type.displayName.capitalize()} content:',
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
+        ),
 
-          // Chart.
-          ItemContentChart(contentModels: sortedContentModels),
+        // Chart.
+        ItemContentChart(contentModels: sortedContentModels),
 
-          // Column of item content.
-          Column(
-            children: [
-              for (final contentModel in sortedContentModels) ...[
-                const Divider(),
-                ListTile(
-                  onTap: () async => _showInfo(contentModel.name),
-                  title: Text(contentModel.name),
-                  subtitle: Text('${contentModel.percentage}%'),
-                ),
-              ],
+        // Column of item content.
+        Column(
+          children: [
+            for (final contentModel in sortedContentModels) ...[
+              const Divider(),
+              ListTile(
+                onTap: () async => _showInfo(contentModel.name),
+                title: Text(contentModel.name),
+                subtitle: Text('${contentModel.percentage}%'),
+              ),
             ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }

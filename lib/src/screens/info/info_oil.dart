@@ -22,6 +22,8 @@ class InfoOil extends StatefulWidget {
 }
 
 class _InfoOilState extends State<InfoOil> {
+  late Future<OilModel> _loadFuture;
+
   /// Create an [OilModel] from the EssentialOils.org JSON entry.
   Future<OilModel> _loadModelFromJson() async {
     final json = await Database.instance.loadItemJson(
@@ -32,9 +34,15 @@ class _InfoOilState extends State<InfoOil> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadFuture = _loadModelFromJson();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _loadModelFromJson(),
+      future: _loadFuture,
       builder: (context, asyncSnapshot) {
         if (!asyncSnapshot.hasData) {
           return const Center(

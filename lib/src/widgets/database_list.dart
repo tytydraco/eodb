@@ -88,6 +88,12 @@ class _DatabaseListState extends State<DatabaseList> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final filteredNames = _filterNames();
 

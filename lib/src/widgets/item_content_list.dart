@@ -25,6 +25,8 @@ class ItemContentList extends StatefulWidget {
 }
 
 class _ItemContentListState extends State<ItemContentList> {
+  late List<ContentModel> _sortedContentModels;
+
   /// Show the info screen for the selected item.
   Future<void> _showInfo(String name) async {
     await Navigator.push(
@@ -39,10 +41,15 @@ class _ItemContentListState extends State<ItemContentList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final sortedContentModels = widget.contentModels.toList()
-      ..sort((a, b) => b.percentage.compareTo(a.percentage));
+  void initState() {
+    super.initState();
 
+    _sortedContentModels = widget.contentModels.toList()
+      ..sort((a, b) => b.percentage.compareTo(a.percentage));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -56,12 +63,12 @@ class _ItemContentListState extends State<ItemContentList> {
           ),
 
           // Chart.
-          ItemContentChart(contentModels: sortedContentModels),
+          ItemContentChart(contentModels: _sortedContentModels),
 
           // Column of item content.
           Column(
             children: [
-              for (final contentModel in sortedContentModels) ...[
+              for (final contentModel in _sortedContentModels) ...[
                 const Divider(),
                 ListTile(
                   onTap: () async => _showInfo(contentModel.name),

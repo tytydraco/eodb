@@ -1,5 +1,4 @@
 import 'package:eodb/src/enum/item_type.dart';
-import 'package:eodb/src/util/capitalize_string.dart';
 import 'package:flutter/material.dart';
 
 /// A search bar widget with decoration.
@@ -31,7 +30,7 @@ class ItemSearchBar extends StatelessWidget {
         hint: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('${type.displayName.capitalize()}s'),
+            Text('${type.displayName}s'),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Icon(Icons.search),

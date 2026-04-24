@@ -2,8 +2,8 @@ import 'package:eodb/src/db/database.dart';
 import 'package:eodb/src/enum/item_type.dart';
 import 'package:eodb/src/model/compound_model.dart';
 import 'package:eodb/src/widgets/eo_network_image.dart';
-import 'package:eodb/src/widgets/item_content_list.dart';
 import 'package:eodb/src/widgets/item_notes.dart';
+import 'package:eodb/src/widgets/show_content.dart';
 import 'package:flutter/material.dart';
 
 /// The info for a compound.
@@ -77,7 +77,7 @@ class _InfoCompoundState extends State<InfoCompound> {
             ItemNotes(name: widget.name),
             const Divider(),
             if (model.oilContent != null && model.oilContent!.isNotEmpty)
-              ItemContentList(
+              ShowContent(
                 contentModels: model.oilContent!,
                 type: ItemType.oil,
               ),

@@ -84,17 +84,17 @@ class _ItemContentChartState extends State<ItemContentChart> {
             )
             .toList();
 
-    // Add "Other" category if there is data to present.
-    if (excludedPercentage != 0) {
-      sections.add(
-        PieChartSectionData(
-          value: excludedPercentage,
-          showTitle: false,
-          radius: 100,
-          color: Colors.brown.shade900,
-        ),
-      );
-    }
+    // // Add "Other" category if there is data to present.
+    // if (excludedPercentage != 0) {
+    //   sections.add(
+    //     PieChartSectionData(
+    //       value: excludedPercentage,
+    //       showTitle: false,
+    //       radius: 100,
+    //       color: Colors.brown.shade900,
+    //     ),
+    //   );
+    // }
 
     return Padding(
       padding: const EdgeInsets.all(20),

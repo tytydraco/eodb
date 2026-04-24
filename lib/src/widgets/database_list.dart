@@ -95,8 +95,6 @@ class _DatabaseListState extends State<DatabaseList> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredNames = _filterNames();
-
     return Scaffold(
       appBar: AppBar(
         title: ItemSearchBar(
@@ -108,6 +106,8 @@ class _DatabaseListState extends State<DatabaseList> {
       body: ListenableBuilder(
         listenable: Storage.instance,
         builder: (_, _) {
+          final filteredNames = _filterNames();
+
           return ListView.separated(
             itemBuilder: (context, index) {
               final name = filteredNames[index];

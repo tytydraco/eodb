@@ -38,63 +38,34 @@ class _ItemContentChartState extends State<ItemContentChart> {
     return HSLColor.fromAHSL(1, hue, 1, 0.6).toColor();
   }
 
-  /// Returns a list of included percentages and the excluded percentage.
-  (List<double>, double) _getPercentages() {
-    final percentages = widget.contentModels
-        .map((model) => model.percentage)
-        .toList();
-
-    // Consolidate percentages after the first 100.
-    if (percentages.length > 100) {
-      final includedPercentages = percentages.take(100).toList();
-      final excludedPercentage = percentages
-          .skip(100)
-          .fold<double>(0, (a, b) => a + b);
-      return (includedPercentages, excludedPercentage);
-    } else {
-      return (percentages, 0);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final percentages = widget.contentModels.map((model) => model.percentage);
+    final percentages =
+        widget.contentModels.map((model) => model.percentage).toList()
+          ..sort((a, b) => b.compareTo(a));
     final maxPercentage = percentages.reduce(max);
     final minPercentage = percentages.reduce(min);
 
-    final (includedPercentages, excludedPercentage) = _getPercentages();
+    // Only take the first 100.
+    final includedPercentages = percentages.take(100).toList();
 
-    final sections =
-        // Add the included percentages.
-        includedPercentages
-            .asMap()
-            .entries
-            .map(
-              (entry) => PieChartSectionData(
-                value: entry.value,
-                showTitle: false,
-                radius: 100,
-                color: _colorByIndex(
-                  index: entry.key,
-                  percentage: entry.value,
-                  minPercentage: minPercentage,
-                  maxPercentage: maxPercentage,
-                ),
-              ),
-            )
-            .toList();
-
-    // // Add "Other" category if there is data to present.
-    // if (excludedPercentage != 0) {
-    //   sections.add(
-    //     PieChartSectionData(
-    //       value: excludedPercentage,
-    //       showTitle: false,
-    //       radius: 100,
-    //       color: Colors.brown.shade900,
-    //     ),
-    //   );
-    // }
+    final sections = includedPercentages
+        .asMap()
+        .entries
+        .map(
+          (entry) => PieChartSectionData(
+            value: entry.value,
+            showTitle: false,
+            radius: 100,
+            color: _colorByIndex(
+              index: entry.key,
+              percentage: entry.value,
+              minPercentage: minPercentage,
+              maxPercentage: maxPercentage,
+            ),
+          ),
+        )
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.all(20),

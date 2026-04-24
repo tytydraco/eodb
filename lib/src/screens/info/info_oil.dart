@@ -100,7 +100,7 @@ class _InfoOilState extends State<InfoOil> {
                 model.compoundContent!.isNotEmpty)
               ItemContentList(
                 contentModels: model.compoundContent!,
-                type: ItemType.compound,
+                type: ItemType.oil,
               ),
           ],
         );

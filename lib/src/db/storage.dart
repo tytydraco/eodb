@@ -1,9 +1,10 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Manage shared preferences and persistent data.
-class Storage {
+class Storage with ChangeNotifier {
   /// Private constructor necessary for singleton access.
   Storage._();
 
@@ -48,6 +49,7 @@ class Storage {
     await initSharedPreferences();
     bookmarkedNames.add(name);
     await _saveBookmarks();
+    notifyListeners();
   }
 
   /// Remove an item bookmark by [name].
@@ -55,6 +57,7 @@ class Storage {
     await initSharedPreferences();
     bookmarkedNames.remove(name);
     await _saveBookmarks();
+    notifyListeners();
   }
 
   /// Set an item's notes by [name] given the note's [content].
@@ -62,6 +65,7 @@ class Storage {
     await initSharedPreferences();
     final sharedPrefsKeyItemNote = '${name}_notes';
     await _sharedPrefs!.setString(sharedPrefsKeyItemNote, content);
+    notifyListeners();
   }
 
   /// Get an item's notes by [name].
@@ -69,5 +73,6 @@ class Storage {
     await initSharedPreferences();
     final sharedPrefsKeyItemNote = '${name}_notes';
     return _sharedPrefs!.getString(sharedPrefsKeyItemNote);
+    notifyListeners();
   }
 }

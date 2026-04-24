@@ -105,13 +105,19 @@ class _DatabaseListState extends State<DatabaseList> {
           onChanged: (criteria) async => setState(() => _criteria = criteria),
         ),
       ),
-      body: ListView.separated(
-        itemBuilder: (context, index) {
-          final name = filteredNames[index];
-          return _buildItemListTile(name);
+      body: ListenableBuilder(
+        listenable: Storage.instance,
+        builder: (_, _) {
+          return ListView.separated(
+            itemBuilder: (context, index) {
+              final name = filteredNames[index];
+              return _buildItemListTile(name);
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+            itemCount: filteredNames.length,
+          );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: filteredNames.length,
       ),
     );
   }

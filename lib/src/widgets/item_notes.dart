@@ -46,32 +46,19 @@ class _ItemNotesState extends State<ItemNotes> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Category label.
-        const ListTile(
-          title: Text(
-            'Notes:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 2),
+      child: TextFormField(
+        controller: _notesController,
+        maxLines: null,
+        decoration: const InputDecoration(
+          hintText: 'Enter your notes here...',
+          border: InputBorder.none,
         ),
-
-        // Input field.
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 2),
-          child: TextFormField(
-            controller: _notesController,
-            maxLines: null,
-            decoration: const InputDecoration(
-              hintText: 'Enter your notes here...',
-              border: InputBorder.none,
-            ),
-            onChanged: (content) async {
-              await Storage.instance.setNotes(widget.name, content);
-            },
-          ),
-        ),
-      ],
+        onChanged: (content) async {
+          await Storage.instance.setNotes(widget.name, content);
+        },
+      ),
     );
   }
 }

@@ -39,6 +39,7 @@ class _ShowContentState extends State<ShowContent> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text('Show ${widget.type.displayName.toLowerCase()} content'),
+      trailing: const Icon(Icons.arrow_forward),
       onTap: _showContent,
     );
   }

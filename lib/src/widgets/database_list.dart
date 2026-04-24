@@ -30,7 +30,6 @@ class DatabaseList extends StatefulWidget {
 }
 
 class _DatabaseListState extends State<DatabaseList> {
-  late List<String> _filteredNames;
   final _searchController = TextEditingController();
   String? _criteria;
 
@@ -95,13 +94,9 @@ class _DatabaseListState extends State<DatabaseList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _filteredNames = _filterNames();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final filteredNames = _filterNames();
+
     return Scaffold(
       appBar: AppBar(
         title: ItemSearchBar(
@@ -112,11 +107,11 @@ class _DatabaseListState extends State<DatabaseList> {
       ),
       body: ListView.separated(
         itemBuilder: (context, index) {
-          final name = _filteredNames[index];
+          final name = filteredNames[index];
           return _buildItemListTile(name);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: _filteredNames.length,
+        itemCount: filteredNames.length,
       ),
     );
   }

@@ -23,20 +23,27 @@ class BookmarkIconButton extends StatefulWidget {
 class _BookmarkIconButtonState extends State<BookmarkIconButton> {
   @override
   Widget build(BuildContext context) {
-    final isBookmarked = Storage.instance.bookmarkedNames.contains(widget.name);
+    return ListenableBuilder(
+      listenable: Storage.instance,
+      builder: (_, _) {
+        final isBookmarked = Storage.instance.bookmarkedNames.contains(
+          widget.name,
+        );
 
-    return IconButton(
-      onPressed: () async {
-        isBookmarked
-            ? await Storage.instance.removeBookmark(widget.name)
-            : await Storage.instance.addBookmark(widget.name);
-        setState(() {});
+        return IconButton(
+          onPressed: () async {
+            isBookmarked
+                ? await Storage.instance.removeBookmark(widget.name)
+                : await Storage.instance.addBookmark(widget.name);
+            setState(() {});
 
-        widget.onChanged?.call();
+            widget.onChanged?.call();
+          },
+          icon: const Icon(Icons.star_border),
+          selectedIcon: const Icon(Icons.star),
+          isSelected: isBookmarked,
+        );
       },
-      icon: const Icon(Icons.star_border),
-      selectedIcon: const Icon(Icons.star),
-      isSelected: isBookmarked,
     );
   }
 }

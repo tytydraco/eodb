@@ -73,6 +73,5 @@ class Storage with ChangeNotifier {
     await initSharedPreferences();
     final sharedPrefsKeyItemNote = '${name}_notes';
     return _sharedPrefs!.getString(sharedPrefsKeyItemNote);
-    notifyListeners();
   }
 }

@@ -59,19 +59,15 @@ class _ContentScreenState extends State<ContentScreen> {
           // Chart.
           ItemContentChart(contentModels: sortedContentModels),
 
-          // Column of item content.
-          Column(
-            children: [
-              for (final contentModel in sortedContentModels) ...[
-                const Divider(),
-                ListTile(
-                  onTap: () async => _showInfo(contentModel.name),
-                  title: Text(contentModel.name),
-                  subtitle: Text('${contentModel.percentage}%'),
-                ),
-              ],
-            ],
-          ),
+          // The item content elements.
+          for (final contentModel in sortedContentModels) ...[
+            const Divider(),
+            ListTile(
+              onTap: () async => _showInfo(contentModel.name),
+              title: Text(contentModel.name),
+              subtitle: Text('${contentModel.percentage}%'),
+            ),
+          ],
         ],
       ),
     );

@@ -48,14 +48,6 @@ class _ContentScreenState extends State<ContentScreen> {
       ),
       body: ListView(
         children: [
-          // Category label.
-          ListTile(
-            title: Text(
-              '${widget.type.displayName} content:',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-
           // Chart.
           ItemContentChart(contentModels: sortedContentModels),
 

@@ -40,29 +40,20 @@ class _ItemContentChartState extends State<ItemContentChart> {
 
   /// Returns a list of included percentages and the excluded percentage.
   (List<double>, double) _getPercentages() {
-    final percentages = widget.contentModels.map((model) => model.percentage);
+    final percentages = widget.contentModels
+        .map((model) => model.percentage)
+        .toList();
 
-    // Sum of percentages that are <0.005% that should be grouped into "Other".
-    final excludedPercentages = percentages.where((percent) => percent < 0.005);
-    var excludedPercentage = excludedPercentages.fold<double>(
-      0,
-      (a, b) => a + b,
-    );
-
-    // If we are showing the "Other" section, percentages >0.005% should be
-    // shown independently.
-    var includedPercentages = excludedPercentage != 0
-        ? percentages.where((percent) => percent >= 0.005).toList()
-        : percentages.toList();
-
-    // If we only have excluded percentages, treat it as the included
-    // percentages.
-    if (includedPercentages.isEmpty) {
-      includedPercentages = excludedPercentages.toList();
-      excludedPercentage = 0;
+    // Consolidate percentages after the first 100.
+    if (percentages.length > 100) {
+      final includedPercentages = percentages.take(100).toList();
+      final excludedPercentage = percentages
+          .skip(100)
+          .fold<double>(0, (a, b) => a + b);
+      return (includedPercentages, excludedPercentage);
+    } else {
+      return (percentages, 0);
     }
-
-    return (includedPercentages, excludedPercentage);
   }
 
   @override
